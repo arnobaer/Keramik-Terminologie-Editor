@@ -54,6 +54,7 @@ class Wandbereich extends AccordionSection
 		$input->addChoice("konischer Hals");
 
 		$box = new Box('hals', "Hals/Halszone", $input->getHtml());
+		$box->floatLeft();
 		echo $box->show();
 	}
 
@@ -66,6 +67,7 @@ class Wandbereich extends AccordionSection
 		$input->addChoice("steil ansteigende Schulter");
 
 		$box = new Box('schulter', "Schulter/Schulterzone", $input->getHtml());
+		$box->floatLeft();
 		echo $box->show();
 	}
 
@@ -81,6 +83,7 @@ class Wandbereich extends AccordionSection
 		$input->addChoice("quaderförmiger Bauch");
 
 		$box = new Box('bauch', "Bauch/Bauchzone", $input->getHtml());
+		$box->floatLeft();
 		echo $box->show();
 	}
 
@@ -93,6 +96,7 @@ class Wandbereich extends AccordionSection
 		$input->addChoice("zylindrische Fußzone");
 
 		$box = new Box('fuss', "Fuß/Fußzone", $input->getHtml());
+		$box->floatLeft();
 		echo $box->show();
 	}
 

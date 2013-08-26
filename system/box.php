@@ -30,17 +30,25 @@ $box->show();
 class Box
 {
 	/** Constructor. */
-	public function __construct($id, $title, $content)
+	public function __construct($id, $title, $contente)
 	{
 		$this->id = $id;
 		$this->title = $title;
 		$this->content = $content;
+		$this->float = false; // if true float boxes to the left.
+	}
+
+	public function floatLeft()
+	{
+		$this->float = true;
 	}
 
 	/** Print section to stdout. */
 	public function show()
 	{
-		echo "\t<div id=\"{$this->id}_box\">".PHP_EOL;
+		$style = '';
+		if ($this->float) $style = 'float:left; padding-right:25px;';
+		echo "\t<div id=\"{$this->id}_box\" style=\"$style\">".PHP_EOL;
 		echo "\t\t<h4 id=\"{$this->id}_box_title\">{$this->title}</h4>".PHP_EOL;
 		echo "\t\t<p id=\"{$this->id}_box_content\">".PHP_EOL;
 		echo "\t\t\t{$this->content}".PHP_EOL;
