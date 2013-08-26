@@ -47,14 +47,14 @@ class ConditionSection extends AccordionSection
 	public function show_fragmentation()
 	{
 		$input = new Choice('condition_fragmentation', false);
-		$input->addChoice(0, 'keine Angabe', false, false, "condition_image('not_specified')");
-		$input->addChoice('vollständig erh.', 'vollständig erhalten', false, false, "condition_image('complete_extent')");
-		$input->addChoice('Fragment', 'allg. Fragment(e)', false, false, "condition_image('general_fragments')");
-		$input->addChoice('Randfragment', false, false, false, "condition_image('rim')");
-		$input->addChoice('Rand-/Wandfragment', false, false, false, "condition_image('rim_wall')");
-		$input->addChoice('Wandfragment', false, false, false, "condition_image('wall')");
-		$input->addChoice('Wand-/Bodenfragment', false, false, false, "condition_image('wall_bottom')");
-		$input->addChoice('Bodenfragment', false, false, false, "condition_image('bottom')");
+		$input->addChoice(0, "keine Angabe", false, false, "condition_image('not_specified')");
+		$input->addChoice("vollständig erh.", "vollständig erhalten", false, false, "condition_image('complete_extent')");
+		$input->addChoice("Fragment", "allg. Fragment(e)", false, false, "condition_image('general_fragments')");
+		$input->addChoice("Randfragment", false, false, false, "condition_image('rim')");
+		$input->addChoice("Rand-/Wandfragment", false, false, false, "condition_image('rim_wall')");
+		$input->addChoice("Wandfragment", false, false, false, "condition_image('wall')");
+		$input->addChoice("Wand-/Bodenfragment", false, false, false, "condition_image('wall_bottom')");
+		$input->addChoice("Bodenfragment", false, false, false, "condition_image('bottom')");
 
 		// Temp. translation.
 		$image = array(
@@ -80,7 +80,7 @@ class ConditionSection extends AccordionSection
 	public function show_fragments_count()
 	{
 
-		$input = new TextInput('condition_fragments_count', 'Stück', false, 3);
+		$input = new TextInput('condition_fragments_count', "Stück", false, 3);
 
 		$box = new Box('fragments_count', "Anzahl der Fragmente (optional)", $input->getHtml());
 		echo $box->show();
@@ -90,8 +90,8 @@ class ConditionSection extends AccordionSection
 	public function show_restoration()
 	{
 		$input = new MultiChoice('condition_restoration');
-		$input->addChoice('glued', 'geklebt (z. B. <em>Archäocoll 2000</em> oder <em>Paraloid&trade; B 72</em>)');
-		$input->addChoice('reconstructed', 'rekonstruiert (z. B. <em>Alabastergips</em>)');
+		$input->addChoice('glued', "geklebt (z. B. <em>Archäocoll 2000</em> oder <em>Paraloid&trade; B 72</em>)");
+		$input->addChoice('reconstructed', "rekonstruiert (z. B. <em>Alabastergips</em>)");
 
 		$box = new Box('restoration', "Restauration", $input->getHtml());
 		echo $box->show();
@@ -112,22 +112,22 @@ class ConditionSection extends AccordionSection
 		$reconstructed = array_key_exists('reconstructed', $restoration ? $restoration : array());
 
 		// Construct the object condition statement.
-		$html = (($fragmentation == 'vollständig erh.') ? '' : $fragmentation);
+		$html = (($fragmentation == "vollständig erh.") ? '' : $fragmentation);
 
 		// First create a list of additional attributes in braces.
 		$args = array();
 		// Hahaha grammar havoc!! xD
 		if ($fragments_count > 1) $args[] = "$fragments_count Fragmente";
-		if ($glued) $args[] = 'geklebt';
-		if ($reconstructed) $args[] = 'rekonstruiert';
+		if ($glued) $args[] = "geklebt";
+		if ($reconstructed) $args[] = "rekonstruiert";
 
 		// Next prepend the major attributes.
 		$args = implode(', ', $args);
 		if ($args) $args = "({$args})";
 		if ($html and $args) $html .= ' '.$args;
-		if ($fragmentation == 'Fragment' and $fragments_count > 1) $html = trim($args, '()');
+		if ($fragmentation == "Fragment" and $fragments_count > 1) $html = trim($args, '()');
 		if ($html) $html = ucfirst($html);
-		if ($glued and $html == '') $html = 'geklebt';
+		if ($glued and $html == '') $html = "geklebt";
 		if ($html) $html = '; '.$html;
 		return $html;
 	}
@@ -137,7 +137,7 @@ class ConditionSection extends AccordionSection
 		$fragmentation = self::getPost('condition_fragmentation');
 		$fragments_count = intval(self::getPost('condition_fragments_count'));
 		$html = $fragmentation;
-		if ($fragmentation == 'Fragment' and $fragments_count > 1) $html = 'mehrere Fragmente';
+		if ($fragmentation == "Fragment" and $fragments_count > 1) $html = "mehrere Fragmente";
 		if ($html) $html = ', '.$html;
 		return $html;
 	}

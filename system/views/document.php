@@ -42,7 +42,7 @@
 	<h1>Keramik Terminologie <sub><em>Editor</em></sub></h1>
 	<img class="cover" src="images/cover.png">
 	<p>Ein Hilfsmittel zur Dokumentation von Keramikfunden nach dem <em>Handbuch zur Terminologie der mittelalterlichen und neuzeitlichen Keramik in Österreich (<span class="caps">FÖM</span>at A/Sonderheft 12)</em>. Zu beziehen beim Bundesdenkmalamt Wien (<a href="http://www.bda.at/organisation/889/">Mag. Hofer</a>) oder beim <a href="http://www.verlag-berger.at/">Verlag Berger</a>, Kosten etwa € 15,-. </p>
-	<p>Der generierte Text kann bearbeitet und in die Funddokumentation eingegliedert werden.</p>
+	<p>Die generierte Beschreibung orientiert sich möglichst strikt an den Empfehlungen des Bundesdenkmalamts und eignet sich besonders für eine einheitliche Beschreibung großer Fundbestände.</p>
 </div>
 
 <div class="clear space"></div>

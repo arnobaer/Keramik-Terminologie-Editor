@@ -65,13 +65,17 @@ class Form {
 		$this->munsell = new MunsellSoilColors();
 
 		// Create accordion sections.
-		$this->basics_section = new BasicsSection();
-		$this->condition_section = new ConditionSection();
+		$basics_section = new BasicsSection();
+		$section_wandbereich = new Wandbereich();
+		$section_bodenbereich = new Bodenbereich();
+		$condition_section = new ConditionSection();
 
 		// Create the input accordion.
 		$this->accordion = new Accordion('accordion');
-		$this->accordion->add_section($this->basics_section);
-		$this->accordion->add_section($this->condition_section);
+		$this->accordion->add_section($basics_section);
+		$this->accordion->add_section($section_wandbereich);
+		$this->accordion->add_section($section_bodenbereich);
+		$this->accordion->add_section($condition_section);
 	}
 
 	// Init post list with secured copy of _POST array.
@@ -280,11 +284,8 @@ class Form {
 
 	public function getBeschreibungLong() {
 		$list = array();
-		$this->addPost($list, 'boden');
-		$this->addPost($list, 'fuss');
-		$this->addPost($list, 'bauch');
-		$this->addPost($list, 'schulter');
-		$this->addPost($list, 'hals');
+		$list[] = Bodenbereich::get_long_description();
+		$list[] = Wandbereich::get_long_description();
 		$rand = array();
 		$muendung = $this->getPost('rand_muendung');
 		$muendung = str_replace('Mündung', '', $muendung);
@@ -620,7 +621,7 @@ class Form {
 		return implode('; ', $html).'.';
 	}
 
-	public function getGeneraatedDescription()
+	public function getGenerateDescription()
 	{
 		if ($this->showDescription()) {
 			$html  = '<div class="description">'.PHP_EOL;
@@ -737,7 +738,7 @@ class Form {
 // 		if ($this->getPost('accordion_active')) {
 
 
-		echo $this->getGeneraatedDescription();
+		echo $this->getGenerateDescription();
 
 		echo "<form action=\"{$url}\" method=\"post\">".PHP_EOL;
 		echo "<input type=\"hidden\" name=\"session\" value=\"{$this->session}\">".PHP_EOL;
@@ -759,7 +760,7 @@ class Form {
 
 		$html = '';
 
-		$html .= $this->getGeneraatedDescription();
+		$html .= $this->getGenerateDescription();
 
 		$html .= "<form action=\"{$url}\" method=\"post\">".PHP_EOL;
 		$html .= "<input type=\"hidden\" name=\"session\" value=\"{$this->session}\">".PHP_EOL;
@@ -1057,56 +1058,56 @@ class Form {
 
 
 
-		$html .= $this->getSection('Wandbereich', 31);
-		$html .= '<div>'.PHP_EOL;
+// 		$html .= $this->getSection('Wandbereich', 31);
+// 		$html .= '<div>'.PHP_EOL;
+//
+// 		$input = new Choice('hals');
+// 		$input->addChoice('stark einziehender Hals');
+// 		$input->addChoice('schwach einziehender Hals');
+// 		$input->addChoice('zylindrischer Hals');
+// 		$input->addChoice('konischer Hals');
+// 		$html .= $this->getBox('Hals/Halszone', $input->getHtml());
+//
+// 		$input = new Choice('schulter');
+// 		$input->addChoice('flach ansteigende Schulter');
+// 		$input->addChoice('steil ansteigende Schulter');
+// 		$html .= $this->getBox('Schulter/Schulterzone', $input->getHtml());
+//
+// 		$input = new Choice('bauch');
+// 		$input->addChoice('zylindrischer Bauch');
+// 		$input->addChoice('ellipsoider Bauch');
+// 		$input->addChoice('kugeliger Bauch');
+// 		$input->addChoice('konischer Bauch');
+// 		$input->addChoice('quaderförmiger Bauch');
+// 		$html .= $this->getBox('Bauch/Bauchzone', $input->getHtml());
+//
+// 		// Fuß/Fußzone.
+// 		$input = new Choice('fuss');
+// 		$input->addChoice('einziehender Fuß');
+// 		$input->addChoice('ausladende Fußzone');
+// 		$input->addChoice('zylindrische Fußzone');
+// 		$html .= $this->getBox('Fuß/Fußzone', $input->getHtml());
+//
+// 		$html .= '</div>'.PHP_EOL;
 
-		$input = new Choice('hals');
-		$input->addChoice('stark einziehender Hals');
-		$input->addChoice('schwach einziehender Hals');
-		$input->addChoice('zylindrischer Hals');
-		$input->addChoice('konischer Hals');
-		$html .= $this->getBox('Hals/Halszone', $input->getHtml());
 
-		$input = new Choice('schulter');
-		$input->addChoice('flach ansteigende Schulter');
-		$input->addChoice('steil ansteigende Schulter');
-		$html .= $this->getBox('Schulter/Schulterzone', $input->getHtml());
-
-		$input = new Choice('bauch');
-		$input->addChoice('zylindrischer Bauch');
-		$input->addChoice('ellipsoider Bauch');
-		$input->addChoice('kugeliger Bauch');
-		$input->addChoice('konischer Bauch');
-		$input->addChoice('quaderförmiger Bauch');
-		$html .= $this->getBox('Bauch/Bauchzone', $input->getHtml());
-
-		// Fuß/Fußzone.
-		$input = new Choice('fuss');
-		$input->addChoice('einziehender Fuß');
-		$input->addChoice('ausladende Fußzone');
-		$input->addChoice('zylindrische Fußzone');
-		$html .= $this->getBox('Fuß/Fußzone', $input->getHtml());
-
-		$html .= '</div>'.PHP_EOL;
-
-
-		$html .= $this->getSection('Bodenbereich', 34);
-		$html .= '<div>'.PHP_EOL;
-
-		$html .= '<div class="sixteen columns">'.PHP_EOL;
-		$html .= '<h4>Bodenformen</h4>'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$input = new Choice('boden');
-		$input->addChoice('Flachboden');
-		$input->addChoice('minimal nach oben gewölbter Flachboden', 'Flachboden, min. n. oben gewölbt');
-		$input->addChoice('Konvexboden');
-		$input->addChoice('Konkavboden');
-		$input->addChoice('aus der Masse gedrehter Standring');
-		$html .= $input->getHtml();
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '</div>'.PHP_EOL;
+// 		$html .= $this->getSection('Bodenbereich', 34);
+// 		$html .= '<div>'.PHP_EOL;
+//
+// 		$html .= '<div class="sixteen columns">'.PHP_EOL;
+// 		$html .= '<h4>Bodenformen</h4>'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$input = new Choice('boden');
+// 		$input->addChoice('Flachboden');
+// 		$input->addChoice('minimal nach oben gewölbter Flachboden', 'Flachboden, min. n. oben gewölbt');
+// 		$input->addChoice('Konvexboden');
+// 		$input->addChoice('Konkavboden');
+// 		$input->addChoice('aus der Masse gedrehter Standring');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '</div>'.PHP_EOL;
 
 
 		$html .= $this->getSection('Massangaben', 34);
