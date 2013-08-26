@@ -1,0 +1,130 @@
+/**
+ * Keramik Terminologie Editor
+ * Copyright (C) 2012-2013  Bernhard R. Arnold
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+body{
+	font: 62.5% "Trebuchet MS", sans-serif;
+	font-size: .7em;
+	margin: 50px;
+}
+h1, h2, h3, h4, h5 {
+	font-family: "Georgia", "Times New Roman", serif;
+	font-weight: normal;
+}
+h1 {
+	font-size: 40px;
+	margin-bottom: 10px;
+}
+h1 em {
+	color: #aaa;
+	border-left: 2px solid #a00;
+	padding-left: 8px;
+	line-height: 2em;
+}
+h3 {
+	font-size: 20px;
+}
+h4 {
+	font-weight: bold;
+	margin: 0 0 5px 0;
+}
+p a {
+	color: #666;
+	text-decoration: none;
+}
+p a:hover {
+	color: #a00;
+	border-bottom: 1px solid #a00;
+}
+.space {
+	margin-bottom: 20px;
+}
+.clear {
+	clear: both;
+}
+.cover {
+	float:left;
+	padding: 3px;
+	background: #ccc;
+	margin-right: 10px;
+}
+.footer {
+	text-align: center;
+	color: #888;
+}
+#dialog-link {
+	padding: .4em 1em .4em 20px;
+	text-decoration: none;
+	position: relative;
+}
+#dialog-link span.ui-icon {
+	margin: 0 5px 0 0;
+	position: absolute;
+	left: .2em;
+	top: 50%;
+	margin-top: -8px;
+}
+#icons {
+	margin: 0;
+	padding: 0;
+}
+#icons li {
+	margin: 2px;
+	position: relative;
+	padding: 4px 0;
+	cursor: pointer;
+	float: left;
+	list-style: none;
+}
+#icons span.ui-icon {
+	float: left;
+	margin: 0 4px;
+}
+.fakewindowcontain .ui-widget-overlay {
+	position: absolute;
+}
+#accordion h3 em {
+	float: right;
+}
+label {
+	display:block;
+}
+div.description div {
+	border: 1px solid #bbb;
+	border-radius: 4px;
+	margin: .5em .5em 1em .5em;
+	padding: .5em;
+	font-size: 1.2em;
+}
+.resultbox {
+	border: 1px solid #bbb;
+	margin: 10px;
+	padding: 10px;
+	border-radius: 10px;
+}
+table td, table td * {
+    vertical-align: top;
+}
+table td {
+	padding-right: 20px;
+}
+input[type=text],
+textarea {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
