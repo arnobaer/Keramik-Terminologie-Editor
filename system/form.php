@@ -68,6 +68,7 @@ class Form {
 		$basics_section = new BasicsSection();
 		$section_wandbereich = new Wandbereich();
 		$section_bodenbereich = new Bodenbereich();
+		$section_funktionselemente = new Funktionselemente();
 		$section_erhaltung = new Erhaltung();
 
 		// Create the input accordion.
@@ -75,6 +76,7 @@ class Form {
 		$this->accordion->add_section($basics_section);
 		$this->accordion->add_section($section_wandbereich);
 		$this->accordion->add_section($section_bodenbereich);
+		$this->accordion->add_section($section_funktionselemente);
 		$this->accordion->add_section($section_erhaltung);
 	}
 
@@ -536,7 +538,7 @@ class Form {
 	public function getLongDescription() {
 		$unsicher = $this->getPost('grundform_unsicher');
 		$unsicher = $unsicher ? ' (?)' : '';
-		$html = '<strong>Form:</strong> '.$this->getGrundformName()."{$unsicher} ".$this->getGrundformNummer().ConditionSection::get_long_description().'<br>'.PHP_EOL;
+		$html = '<strong>Form:</strong> '.$this->getGrundformName()."{$unsicher} ".$this->getGrundformNummer().Erhaltung::get_long_description().'<br>'.PHP_EOL;
 
 		$html .= $this->getBeschreibungLong();
 		$html .= $this->getGebruchsspurenLong();
@@ -570,7 +572,7 @@ class Form {
 
 		$unsicher = $this->getPost('grundform_unsicher');
 		$unsicher = $unsicher ? ' (?)' : '';
-		$html[] = $this->getGrundformName()."{$unsicher} ".$this->getGrundformNummer().ConditionSection::get_short_description();
+		$html[] = $this->getGrundformName()."{$unsicher} ".$this->getGrundformNummer().Erhaltung::get_short_description();
 
 		$intro = array();
 		$herstellung = $this->getHerstellungsspurenShort();
@@ -1156,35 +1158,35 @@ class Form {
 		$html .= '</div>'.PHP_EOL; // Massangaben
 
 
-		$html .= $this->getSection('Funktionselemente', 35);
-
-		$html .= '<div>'.PHP_EOL;
-
-		$input = new Choice('standvorrichtungen');
-		$input->addChoice('Hohlfuß');
-		$input->addChoice('Massivfuß');
-		$input->addChoice('zapfenförmiger Massivfuß');
-		$input->addChoice('tierfußförmiger Massivfuß');
-		$input->addChoice('zylindrischer Massivfuß', 'zylindrischer/amorpher Massivfuß');
-		$input->addChoice('Standring');
-		$html .= $this->getBox('Standvorrichtungen', $input->getHtml());
-
-		$input = new MultiChoice('handhaben');
-		$input->addChoice('Grifflappen');
-		$input->addChoice('Knauf');
-		$input->addChoice('Knubbe');
-		$input->addChoice('Rohrgriff');
-		$input->addChoice('Stielgriff');
-		$html .= $this->getBox('Handhaben', $input->getHtml());
-
-		$input = new MultiChoice('handhaben_henkel');
-		$input->addChoice('Bandhenkel');
-		$input->addChoice('Wulsthenkel');
-		$html .= $this->getBox('', $input->getHtml());
-
-		// BAUSTELLE
-
-		$html .= '</div>'.PHP_EOL;
+// 		$html .= $this->getSection('Funktionselemente', 35);
+//
+// 		$html .= '<div>'.PHP_EOL;
+//
+// 		$input = new Choice('standvorrichtungen');
+// 		$input->addChoice('Hohlfuß');
+// 		$input->addChoice('Massivfuß');
+// 		$input->addChoice('zapfenförmiger Massivfuß');
+// 		$input->addChoice('tierfußförmiger Massivfuß');
+// 		$input->addChoice('zylindrischer Massivfuß', 'zylindrischer/amorpher Massivfuß');
+// 		$input->addChoice('Standring');
+// 		$html .= $this->getBox('Standvorrichtungen', $input->getHtml());
+//
+// 		$input = new MultiChoice('handhaben');
+// 		$input->addChoice('Grifflappen');
+// 		$input->addChoice('Knauf');
+// 		$input->addChoice('Knubbe');
+// 		$input->addChoice('Rohrgriff');
+// 		$input->addChoice('Stielgriff');
+// 		$html .= $this->getBox('Handhaben', $input->getHtml());
+//
+// 		$input = new MultiChoice('handhaben_henkel');
+// 		$input->addChoice('Bandhenkel');
+// 		$input->addChoice('Wulsthenkel');
+// 		$html .= $this->getBox('', $input->getHtml());
+//
+// 		// BAUSTELLE
+//
+// 		$html .= '</div>'.PHP_EOL;
 
 		$html .= $this->getSection('Gebrauchsspuren', 52);
 
@@ -1342,39 +1344,39 @@ class Form {
 
 		$html .= '</div>'.PHP_EOL;
 
-		$html .= $this->getSection('Erhaltungszustand');
-		$html .= '<div>'.PHP_EOL;
-
-		// Fragmentierung.
-		$input = new Choice('condition_fragmentation');
-		$input->addChoice('vollständig erh.', 'vollständig erhalten');
-		$input->addChoice('Fragment', 'allg. Fragment(e)');
-		$input->addChoice('Randfragment');
-		$input->addChoice('Rand-/Wandfragment');
-		$input->addChoice('Wandfragment');
-		$input->addChoice('Wand-/Bodenfragment');
-		$input->addChoice('Bodenfragment');
-		$input = $input->getHtml().$this->getTextInput('condition_fragments_count', '<h4>Anzahl der Fragmente (optional)</h4>').' Stück';
-		$html .= $this->getBox('Fragmentierung', $input);
-// 		print $this->getPost('condition_fragmentation');
-		$image = array(
-			0 => 'not_specified',
-			'vollständig erh.' => 'complete_extent',
-			'Fragment' => 'general_fragments',
-			'Randfragment' => 'rim',
-			'Rand-/Wandfragment' => 'rim_wall',
-			'Wandfragment' => 'wall',
-			'Wand-/Bodenfragment' => 'wall_bottom',
-			'Bodenfragment' => 'bottom',
-		);
-		$html .= '<div><img id="condition_figure" src="images/condition_'.$image[$this->getPost('condition_fragmentation')].'.png"></div>';
-
-		// Restauration.
-		$input = new MultiChoice('condition_restoration');
-		$input->addChoice('geklebt', 'geklebt (z. B. Archäocoll 2000)');
-		$html .= $this->getBox('Restauration', $input->getHtml());
-
-		$html .= '</div>'.PHP_EOL;
+// 		$html .= $this->getSection('Erhaltungszustand');
+// 		$html .= '<div>'.PHP_EOL;
+//
+// 		// Fragmentierung.
+// 		$input = new Choice('condition_fragmentation');
+// 		$input->addChoice('vollständig erh.', 'vollständig erhalten');
+// 		$input->addChoice('Fragment', 'allg. Fragment(e)');
+// 		$input->addChoice('Randfragment');
+// 		$input->addChoice('Rand-/Wandfragment');
+// 		$input->addChoice('Wandfragment');
+// 		$input->addChoice('Wand-/Bodenfragment');
+// 		$input->addChoice('Bodenfragment');
+// 		$input = $input->getHtml().$this->getTextInput('condition_fragments_count', '<h4>Anzahl der Fragmente (optional)</h4>').' Stück';
+// 		$html .= $this->getBox('Fragmentierung', $input);
+// // 		print $this->getPost('condition_fragmentation');
+// 		$image = array(
+// 			0 => 'not_specified',
+// 			'vollständig erh.' => 'complete_extent',
+// 			'Fragment' => 'general_fragments',
+// 			'Randfragment' => 'rim',
+// 			'Rand-/Wandfragment' => 'rim_wall',
+// 			'Wandfragment' => 'wall',
+// 			'Wand-/Bodenfragment' => 'wall_bottom',
+// 			'Bodenfragment' => 'bottom',
+// 		);
+// 		$html .= '<div><img id="condition_figure" src="images/condition_'.$image[$this->getPost('condition_fragmentation')].'.png"></div>';
+//
+// 		// Restauration.
+// 		$input = new MultiChoice('condition_restoration');
+// 		$input->addChoice('geklebt', 'geklebt (z. B. Archäocoll 2000)');
+// 		$html .= $this->getBox('Restauration', $input->getHtml());
+//
+// 		$html .= '</div>'.PHP_EOL;
 
 		$html .= '<div>';
 		$html .= '<hr>';

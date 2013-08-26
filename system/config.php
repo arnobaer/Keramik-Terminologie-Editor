@@ -36,5 +36,6 @@ require_once SYS_PATH . '/accordion_section.php';
 require_once SYS_PATH . '/basic_section.php';
 require_once SYS_PATH . '/section_wandbereich.php';
 require_once SYS_PATH . '/section_bodenbereich.php';
+require_once SYS_PATH . '/section_funktionselemente.php';
 require_once SYS_PATH . '/section_erhaltung.php';
 require_once SYS_PATH . '/form.php';
