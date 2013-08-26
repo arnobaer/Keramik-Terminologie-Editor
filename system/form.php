@@ -19,8 +19,6 @@
  *
  */
 
-include_once('include/munsell_color.php');
-
 class Request
 {
 	const Reset = 'request_reset';

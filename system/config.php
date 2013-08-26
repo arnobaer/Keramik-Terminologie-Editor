@@ -19,38 +19,20 @@
  *
  */
 
-/**
- * Include class by filename.
- *
- * @param  string $file  class path and filename.
- * @return true on success.
- */
-function __load_class_file($file)
-{
-    if (file_exists($file)) {
-        include_once $file;
-        return true;
-    }
-    return false;
-}
+const SYS_PATH  = 'system';
+const CTRL_PATH = 'system/controller';
+const CORE_PATH = 'system/core';
+const VIEW_PATH = 'system/views';
 
-/**
- * Automatically includes classes
- *
- * @throws Exception
- *
- * @param  string $class_name  Name of the class to load
- * @return void
- */
-function __autoload($class_name)
-{
-	$file = 'include/' . $class_name . '.inc.php';
-	if (file_exists($file)) {
-		include_once $file;
-		return true;
-	}
-	return false;
+require_once CORE_PATH . '/munsell.php';
 
-	throw new Exception('The class ' . $class_name . ' could not be loaded');
-}
+require_once SYS_PATH . '/box.php';
+require_once SYS_PATH . '/choice.php';
+require_once SYS_PATH . '/multi_choice.php';
+require_once SYS_PATH . '/text_input.php';
 
+require_once SYS_PATH . '/accordion.php';
+require_once SYS_PATH . '/accordion_section.php';
+require_once SYS_PATH . '/basic_section.php';
+require_once SYS_PATH . '/condition_section.php';
+require_once SYS_PATH . '/form.php';
