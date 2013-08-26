@@ -30,7 +30,7 @@ $box->show();
 class Box
 {
 	/** Constructor. */
-	public function __construct($id, $title, $contente)
+	public function __construct($id, $title, $content)
 	{
 		$this->id = $id;
 		$this->title = $title;

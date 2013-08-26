@@ -68,14 +68,14 @@ class Form {
 		$basics_section = new BasicsSection();
 		$section_wandbereich = new Wandbereich();
 		$section_bodenbereich = new Bodenbereich();
-		$condition_section = new ConditionSection();
+		$section_erhaltung = new Erhaltung();
 
 		// Create the input accordion.
 		$this->accordion = new Accordion('accordion');
 		$this->accordion->add_section($basics_section);
 		$this->accordion->add_section($section_wandbereich);
 		$this->accordion->add_section($section_bodenbereich);
-		$this->accordion->add_section($condition_section);
+		$this->accordion->add_section($section_erhaltung);
 	}
 
 	// Init post list with secured copy of _POST array.
