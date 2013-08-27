@@ -72,6 +72,7 @@ class SectionFracture extends AccordionSection
 		$input->addChoice(self::VAL_GRAINY, 'körnig (haptisch)');
 
 		$box = new Box('fracture_haptic', "Bruchstruktur (haptisch)", $input->getHtml());
+		$box->floatLeft();
 		echo $box->show();
 	}
 
@@ -85,6 +86,7 @@ class SectionFracture extends AccordionSection
 		$input->addChoice(self::VAL_CONCHOIDAL, 'muschelig (optisch)');
 
 		$box = new Box('fracture_haptic', "Bruchstruktur (optisch)", $input->getHtml());
+		$box->floatLeft();
 		echo $box->show();
 	}
 
@@ -96,8 +98,10 @@ class SectionFracture extends AccordionSection
 		$input->addChoice(self::VAL_LONGISH);
 		$input->addChoice(self::VAL_ROUNDISH);
 
-		$box = new Box('fracture_haptic_optic', "Porenform", $input->getHtml());
-		echo $box->show("<p>Form der Poren in der Matrix, nicht der ausgefallenen Partikel, nur am Dünnschliff erkennbar.</p>");
+		$box = new Box('fracture_haptic_optic', "Porenform", $input->getHtml() .
+			"<p class=\"infobox\" style=\"width:400px;\"><strong>Hinweis:</strong> Form der Poren in der Matrix, nicht der ausgefallenen Partikel. Nur am Dünnschliff erkennbar.</p>");
+		$box->floatLeft();
+		echo $box->show();
 	}
 
 	/** Returns long detailed description. */
