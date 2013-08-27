@@ -1,4 +1,4 @@
-<?php define('KeramikGuardian', true);
+<?php define('KeramikTerminologieEditor', true);
 
 /**
  * Keramik Terminologie Editor

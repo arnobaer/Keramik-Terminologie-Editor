@@ -1,4 +1,4 @@
-<?php defined('KeramikGuardian') or die();
+<?php defined('KeramikTerminologieEditor') or die();
 
 /**
  * Keramik Terminologie Editor

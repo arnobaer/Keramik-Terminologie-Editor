@@ -1,4 +1,4 @@
-<?php defined('KeramikGuardian') or die();
+<?php defined('KeramikTerminologieEditor') or die();
 
 /**
  * Keramik Terminologie Editor
@@ -24,6 +24,8 @@ const CTRL_PATH = 'system/controller';
 const CORE_PATH = 'system/core';
 const VIEW_PATH = 'system/views';
 
+require_once CORE_PATH . '/functions.php';
+
 require_once CORE_PATH . '/munsell.php';
 
 require_once SYS_PATH . '/box.php';
@@ -37,5 +39,5 @@ require_once SYS_PATH . '/basic_section.php';
 require_once SYS_PATH . '/section_wandbereich.php';
 require_once SYS_PATH . '/section_bodenbereich.php';
 require_once SYS_PATH . '/section_funktionselemente.php';
-require_once SYS_PATH . '/section_erhaltung.php';
+require_once SYS_PATH . '/section_condition.php';
 require_once SYS_PATH . '/form.php';

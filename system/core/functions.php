@@ -19,38 +19,27 @@
  *
  */
 
-/** Implements a jQuery UI accordion widget.
-
-How to use:
-
-$accordion = new Accordion('accordion');
-$accordion.add_section(new FooSection());
-$accordion.add_section(new BarSection());
-$accordion->show();
-
-*/
-class Accordion
+/** Get POST value or false if does not exist.
+ * @param key the variable name.
+ * @returns string value on success or false if variable not set.
+ */
+function post($key)
 {
-	/** Constructor. */
-	public function __construct($id)
-	{
-		$this->id = $id;
-		$this->sections = array();
-	}
-
-	/** Add a section to the accordion. */
-	public function add_section(&$section)
-	{
-		$this->sections[] = $section;
-	}
-
-	/** Print section to stdout. */
-	public function show()
-	{
-		echo "<div id=\"{$this->id}\">".PHP_EOL;
-		foreach ($this->sections as &$section) {
-			$section->show();
+	if (isset($_POST[$key])) {
+		if (is_array($_POST[$key])) {
+			$values = array();
+			foreach ($_POST[$key] as $key_ => $value) {
+				$values[$key_] = htmlspecialchars($value);
+			}
+			return $values;
 		}
-		echo '</div>'.PHP_EOL;
+		return filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
 	}
+	return false;
+}
+
+/** Optional translation. */
+function tr($text)
+{
+	return $text;
 }

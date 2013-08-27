@@ -1,4 +1,4 @@
-<?php defined('KeramikGuardian') or die();
+<?php defined('KeramikTerminologieEditor') or die();
 
 /**
  * Keramik Terminologie Editor
@@ -69,7 +69,7 @@ class Form {
 		$section_wandbereich = new Wandbereich();
 		$section_bodenbereich = new Bodenbereich();
 		$section_funktionselemente = new Funktionselemente();
-		$section_erhaltung = new Erhaltung();
+		$section_condition = new SectionCondition();
 
 		// Create the input accordion.
 		$this->accordion = new Accordion('accordion');
@@ -77,7 +77,7 @@ class Form {
 		$this->accordion->add_section($section_wandbereich);
 		$this->accordion->add_section($section_bodenbereich);
 		$this->accordion->add_section($section_funktionselemente);
-		$this->accordion->add_section($section_erhaltung);
+		$this->accordion->add_section($section_condition);
 	}
 
 	// Init post list with secured copy of _POST array.
@@ -538,7 +538,9 @@ class Form {
 	public function getLongDescription() {
 		$unsicher = $this->getPost('grundform_unsicher');
 		$unsicher = $unsicher ? ' (?)' : '';
-		$html = '<strong>Form:</strong> '.$this->getGrundformName()."{$unsicher} ".$this->getGrundformNummer().Erhaltung::get_long_description().'<br>'.PHP_EOL;
+		$html = '<strong>Form:</strong> '.
+			$this->getGrundformName()."{$unsicher} ".
+			$this->getGrundformNummer().SectionCondition::get_long_description().'<br>'.PHP_EOL;
 
 		$html .= $this->getBeschreibungLong();
 		$html .= $this->getGebruchsspurenLong();
@@ -572,7 +574,7 @@ class Form {
 
 		$unsicher = $this->getPost('grundform_unsicher');
 		$unsicher = $unsicher ? ' (?)' : '';
-		$html[] = $this->getGrundformName()."{$unsicher} ".$this->getGrundformNummer().Erhaltung::get_short_description();
+		$html[] = $this->getGrundformName()."{$unsicher} ".$this->getGrundformNummer().SectionCondition::get_short_description();
 
 		$intro = array();
 		$herstellung = $this->getHerstellungsspurenShort();
