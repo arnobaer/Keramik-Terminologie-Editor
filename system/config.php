@@ -32,12 +32,15 @@ require_once SYS_PATH . '/box.php';
 require_once SYS_PATH . '/choice.php';
 require_once SYS_PATH . '/multi_choice.php';
 require_once SYS_PATH . '/text_input.php';
+require_once SYS_PATH . '/text_area.php';
 
 require_once SYS_PATH . '/accordion.php';
 require_once SYS_PATH . '/accordion_section.php';
 require_once SYS_PATH . '/basic_section.php';
+require_once SYS_PATH . '/section_fracture.php';
 require_once SYS_PATH . '/section_wandbereich.php';
 require_once SYS_PATH . '/section_bodenbereich.php';
 require_once SYS_PATH . '/section_funktionselemente.php';
+require_once SYS_PATH . '/section_usewear.php';
 require_once SYS_PATH . '/section_condition.php';
 require_once SYS_PATH . '/form.php';

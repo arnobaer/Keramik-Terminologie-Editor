@@ -66,17 +66,21 @@ class Form {
 
 		// Create accordion sections.
 		$basics_section = new BasicsSection();
+		$section_fracture = new SectionFracture();
 		$section_wandbereich = new Wandbereich();
 		$section_bodenbereich = new Bodenbereich();
 		$section_funktionselemente = new Funktionselemente();
+		$section_usewear = new SectionUsewear();
 		$section_condition = new SectionCondition();
 
 		// Create the input accordion.
 		$this->accordion = new Accordion('accordion');
 		$this->accordion->add_section($basics_section);
+		$this->accordion->add_section($section_fracture);
 		$this->accordion->add_section($section_wandbereich);
 		$this->accordion->add_section($section_bodenbereich);
 		$this->accordion->add_section($section_funktionselemente);
+		$this->accordion->add_section($section_usewear);
 		$this->accordion->add_section($section_condition);
 	}
 
@@ -317,13 +321,9 @@ class Form {
 		return $list ? "<strong>Beschreibung:</strong> {$list}.<br>" : '';
 	}
 
-	public function getGebruchsspurenLong() {
-		$spuren = ucfirst($this->getPost('gebrauchsspuren'));
-		$spuren = trim($spuren);
-		$spuren = trim($spuren, ',');
-		$spuren = trim($spuren, '.');
-		$spuren = trim($spuren, ';');
-		return $spuren ? "<strong>Gebrauchsspuren:</strong> ".ucfirst(rtrim($spuren, '.')).".<br>".PHP_EOL : '';
+	public function get_usewear_long() {
+		$usewear = SectionUsewear::get_long_description();
+		return $usewear ? "<strong>Gebrauchsspuren:</strong> ".$usewear.".<br>".PHP_EOL : '';
 	}
 
 	public function getHerstellungsspurenShort() {
@@ -464,15 +464,8 @@ class Form {
 	}
 
 	public function getBruchstrukturLong() {
-		$bruch = array();
-		$haptic = $this->getPost('bruchstruktur_haptisch');
-		$optic = $this->getPost('bruchstruktur_optisch');
-		$pores = $this->getPost('porenform');
-		if ($haptic) $bruch[] = $haptic;
-		if ($optic) $bruch[] = $optic;
-		if ($pores) $bruch[] = $pores;
-		$bruch = ucfirst(implode(', ', $bruch));
-		return $bruch ? "<strong>Bruchstruktur:</strong> $bruch.<br>".PHP_EOL : '';
+		$fracture = SectionFracture::get_long_description();
+		return $fracture ? "<strong>Bruchstruktur:</strong> $fracture.<br>".PHP_EOL : '';
 	}
 
 	public function getScherbenhaerteLong() {
@@ -543,7 +536,7 @@ class Form {
 			$this->getGrundformNummer().SectionCondition::get_long_description().'<br>'.PHP_EOL;
 
 		$html .= $this->getBeschreibungLong();
-		$html .= $this->getGebruchsspurenLong();
+		$html .= $this->get_usewear_long();
 		$html .= $this->getMasseLong();
 
 		$list = array();
@@ -817,40 +810,40 @@ class Form {
 
 		$html .= '</div>';
 
-		$html .= $this->getSection('Bruch', 15);
-		$html .= '<div>'.PHP_EOL;
-
-		$html .= '<div class="eight columns">'.PHP_EOL;
-		$html .= '<h4>Bruchstruktur</h4>'.PHP_EOL;
-		$html .= '<div class="four columns alpha"><p>'.PHP_EOL;
-		$input = new Choice('bruchstruktur_haptisch');
-		$input->addChoice('glatt', 'glatt (haptisch)');
-		$input->addChoice('körnig', 'körnig (haptisch)');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
-		$input = new Choice('bruchstruktur_optisch');
-		$input->addChoice('geklüftet', 'geklüftet (optisch)');
-		$input->addChoice('geschichtet', 'geschichtet/splittrig (optisch)');
-		$input->addChoice('muschelig', 'muschelig (optisch)');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div class="eight columns">'.PHP_EOL;
-		$html .= '<h4>Porenform</h4>'.PHP_EOL;
-		$html .= '<div class="four columns alpha"><p>'.PHP_EOL;
-		$input = new Choice('porenform');
-		$input->addChoice('längliche Porenform', 'länglich');
-		$input->addChoice('rundliche Porenform', 'rundlich');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
-		$html .= 'Form der Poren in der Matrix, nicht der ausgefallenen Partikel, nur am Dünnschliff erkennbar.';
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '</div>'.PHP_EOL;
+// 		$html .= $this->getSection('Bruch', 15);
+// 		$html .= '<div>'.PHP_EOL;
+//
+// 		$html .= '<div class="eight columns">'.PHP_EOL;
+// 		$html .= '<h4>Bruchstruktur</h4>'.PHP_EOL;
+// 		$html .= '<div class="four columns alpha"><p>'.PHP_EOL;
+// 		$input = new Choice('bruchstruktur_haptisch');
+// 		$input->addChoice('glatt', 'glatt (haptisch)');
+// 		$input->addChoice('körnig', 'körnig (haptisch)');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
+// 		$input = new Choice('bruchstruktur_optisch');
+// 		$input->addChoice('geklüftet', 'geklüftet (optisch)');
+// 		$input->addChoice('geschichtet', 'geschichtet/splittrig (optisch)');
+// 		$input->addChoice('muschelig', 'muschelig (optisch)');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div class="eight columns">'.PHP_EOL;
+// 		$html .= '<h4>Porenform</h4>'.PHP_EOL;
+// 		$html .= '<div class="four columns alpha"><p>'.PHP_EOL;
+// 		$input = new Choice('porenform');
+// 		$input->addChoice('längliche Porenform', 'länglich');
+// 		$input->addChoice('rundliche Porenform', 'rundlich');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
+// 		$html .= 'Form der Poren in der Matrix, nicht der ausgefallenen Partikel, nur am Dünnschliff erkennbar.';
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '</div>'.PHP_EOL;
 
 
 		$html .= $this->getSection('Herstellung', 16);
@@ -1190,13 +1183,13 @@ class Form {
 //
 // 		$html .= '</div>'.PHP_EOL;
 
-		$html .= $this->getSection('Gebrauchsspuren', 52);
-
-		$html .= '<div>'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$html .= $this->getTextArea('gebrauchsspuren', '<strong>Gebrauchsspuren</strong> (Abreibespuren, Schmauchspuren, Reparaturen, etc.)');
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
+// 		$html .= $this->getSection('Gebrauchsspuren', 52);
+//
+// 		$html .= '<div>'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$html .= $this->getTextArea('gebrauchsspuren', '<strong>Gebrauchsspuren</strong> (Abreibespuren, Schmauchspuren, Reparaturen, etc.)');
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
 
 
 		$html .= $this->getSection('Grundform', 58);
