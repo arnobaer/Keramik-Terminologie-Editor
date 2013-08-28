@@ -37,9 +37,15 @@ class Funktionselemente extends AccordionSection
 
 	public function show_content()
 	{
-		$this->show_standvorrichtungen();
-		$this->show_handhaben();
-		$this->show_handhaben_henkel();
+?>
+		<table>
+			<tr>
+				<td><?php $this->show_standvorrichtungen(); ?></td>
+				<td><?php $this->show_handhaben(); ?></td>
+				<td><?php $this->show_handhaben_henkel(); ?></td>
+			</tr>
+		</table>
+<?php
 	}
 
 	/** Specify foot type. */
@@ -55,7 +61,6 @@ class Funktionselemente extends AccordionSection
 		$input->addChoice("Standring");
 
 		$box = new Box('standvorrichtungen', "Standvorrichtungen", $input->getHtml());
-		$box->floatLeft();
 		echo $box->show();
 	}
 
@@ -70,7 +75,6 @@ class Funktionselemente extends AccordionSection
 		$input->addChoice("Stielgriff");
 
 		$box = new Box('handhaben', "Handhaben", $input->getHtml());
-		$box->floatLeft();
 		echo $box->show();
 	}
 
@@ -82,7 +86,6 @@ class Funktionselemente extends AccordionSection
 		$input->addChoice('Wulsthenkel');
 
 		$box = new Box('handhaben_henkel', "Handhaben/Henkel", $input->getHtml());
-		$box->floatLeft();
 		echo $box->show();
 	}
 

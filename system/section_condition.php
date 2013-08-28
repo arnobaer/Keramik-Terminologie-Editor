@@ -60,9 +60,17 @@ class SectionCondition extends AccordionSection
 	/** Print all subsections. */
 	public function show_content()
 	{
-		$this->show_fragmentation();
-		$this->show_fragments_count();
-		$this->show_restoration();
+?>
+		<table>
+			<tr>
+				<td style="width:380px;" rowspan="2"><?php $this->show_fragmentation(); ?></td>
+				<td><?php $this->show_fragments_count(); ?></td>
+			</tr>
+			<tr>
+				<td><?php $this->show_restoration(); ?></td>
+			</tr>
+		</table>
+<?php
 	}
 
 	/** Specify the degree of possible fragmentation. */

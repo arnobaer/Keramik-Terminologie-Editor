@@ -51,6 +51,14 @@ p a:hover {
 	color: #a00;
 	border-bottom: 1px solid #a00;
 }
+fieldset {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+legend {
+	font-weight: bold;
+}
 .space {
 	margin-bottom: 20px;
 }
@@ -103,6 +111,7 @@ p a:hover {
 }
 label {
 	display:block;
+	line-height: 1.5em;
 }
 div.description div {
 	border: 1px solid #bbb;
@@ -117,11 +126,18 @@ div.description div {
 	padding: 10px;
 	border-radius: 10px;
 }
+table {
+	width: 100%;
+	white-space: nowrap;
+}
+table td * {
+	white-space: normal;
+}
 table td, table td * {
     vertical-align: top;
 }
 table td {
-	padding-right: 20px;
+	padding: 0 5px;
 }
 input[type=text],
 textarea {

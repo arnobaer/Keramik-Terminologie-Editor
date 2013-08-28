@@ -38,6 +38,7 @@ require_once SYS_PATH . '/accordion.php';
 require_once SYS_PATH . '/accordion_section.php';
 require_once SYS_PATH . '/basic_section.php';
 require_once SYS_PATH . '/section_fracture.php';
+require_once SYS_PATH . '/section_border.php';
 require_once SYS_PATH . '/section_wandbereich.php';
 require_once SYS_PATH . '/section_bodenbereich.php';
 require_once SYS_PATH . '/section_funktionselemente.php';

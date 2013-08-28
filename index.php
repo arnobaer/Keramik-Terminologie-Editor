@@ -23,8 +23,4 @@ include_once('system/config.php');
 
 $form = new Form();
 
-// This restores the last open accordion panel.
-$accordion_active = $form->getPost('accordion_active');
-$accordion_restore = "<script type=\"text/javascript\">".'$(function() {$("#accordion").accordion("option", "active", '.($accordion_active !== false ? $accordion_active : 'false').');});</script>'.PHP_EOL;
-
 include VIEW_PATH . '/document.php';

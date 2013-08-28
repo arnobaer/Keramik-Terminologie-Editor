@@ -45,7 +45,13 @@ class SectionUsewear extends AccordionSection
 	/** Print all subsections. */
 	public function show_content()
 	{
-		$this->show_usewear();
+?>
+		<table>
+			<tr>
+				<td><?php $this->show_usewear(); ?></td>
+			</tr>
+		</table>
+<?php
 	}
 
 	/** Specify the degree of use-wear. */

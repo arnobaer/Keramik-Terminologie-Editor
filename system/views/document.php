@@ -30,7 +30,8 @@
 	<script src="js/jquery-ui-1.10.3.custom.js"></script>
 	<script src="js/keramik.js"></script>
 	<script src="js/keramik-condition.js"></script>
-	<?php echo $accordion_restore; ?>
+	<!-- This restores the last open accordion panel. -->
+	<script type="text/javascript">$(function() {$("#accordion").accordion("option", "active", <?php echo post('accordion_active', 'false'); ?>);});</script>
 </head>
 <body style="margin-top: 0; padding-top:10px;">
 

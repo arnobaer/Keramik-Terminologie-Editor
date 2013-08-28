@@ -54,7 +54,7 @@ class Choice {
 
 	// list true generates an <ul> list.
 	public function getHtml() {
-		$html = '';
+		$html = '<div>';
 		foreach ($this->_buttons as $key => &$button) {
 			$value = &$button[0];
 			$label = &$button[1];
@@ -66,6 +66,6 @@ class Choice {
 			$onclick = ($button[3] ? " onclick=\"{$button[3]}\"" : '');
 			$html .= "<label for=\"{$id}\"><input{$onclick} style=\"margin-left:{$margin}pt\" id=\"{$id}\" type=\"radio\" name=\"{$this->_key}\" value=\"{$value}\"{$checked}> {$label}</label>".PHP_EOL;
 		}
-		return $html;
+		return $html.'</div>';
 	}
 }

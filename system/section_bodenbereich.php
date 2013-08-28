@@ -34,7 +34,13 @@ class Bodenbereich extends AccordionSection
 
 	public function show_content()
 	{
-		$this->show_boden();
+?>
+		<table style="width:auto;">
+			<tr>
+				<td><?php $this->show_boden(); ?></td>
+			</tr>
+		</table>
+<?php
 	}
 
 	/** Specify the vessel neck type. */

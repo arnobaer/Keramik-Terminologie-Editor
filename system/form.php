@@ -67,6 +67,7 @@ class Form {
 		// Create accordion sections.
 		$basics_section = new BasicsSection();
 		$section_fracture = new SectionFracture();
+		$section_border = new SectionBorder();
 		$section_wandbereich = new Wandbereich();
 		$section_bodenbereich = new Bodenbereich();
 		$section_funktionselemente = new Funktionselemente();
@@ -77,6 +78,7 @@ class Form {
 		$this->accordion = new Accordion('accordion');
 		$this->accordion->add_section($basics_section);
 		$this->accordion->add_section($section_fracture);
+		$this->accordion->add_section($section_border);
 		$this->accordion->add_section($section_wandbereich);
 		$this->accordion->add_section($section_bodenbereich);
 		$this->accordion->add_section($section_funktionselemente);
@@ -292,32 +294,18 @@ class Form {
 		$list = array();
 		$list[] = Bodenbereich::get_long_description();
 		$list[] = Wandbereich::get_long_description();
-		$rand = array();
-		$muendung = $this->getPost('rand_muendung');
-		$muendung = str_replace('Mündung', '', $muendung);
-		$muendung = str_replace('mündung', '', $muendung);
-		$muendung = trim($muendung);
-		$randform = $this->getPost('rand_form');
-		$randkontur = $this->getPost('rand_kontur');
-		$randherstellung = $this->getPost('rand_herstellung');
-		$randformal = $this->getPost('rand_formal');
-		if ($randkontur == 'Fahne') { $randform = 'Fahne'; $randkontur = ''; } // Superior.
-		if ($randformal) $rand[] = "{$randformal}er";
-		if ($randherstellung) $rand[] = "{$randherstellung}er";
-		if ($randform and $randkontur) $randkontur = str_replace(' Rand', '', $randkontur);
-		if ($randkontur) $rand[] = $randkontur;
-		if ($randform) $rand[] = $randform;
-		if ($muendung) $rand[] = $muendung . ' Mündung';
-		$list[] = implode(', ', $rand);
-		$list2 = array();
-		foreach ($list as $item) {
-			if ($item) $list2[] = $item;
-		}
-		$list = ucfirst(implode('; ', $list2));
+		$list[] = SectionBorder::get_long_description();
+		$list = ucfirst(implode('; ', array_filter($list)));
+
 		// Sonderfall: Keine Randform noch Randkontur gewählt, aber Formalbeschreibung,
 		// schließe Satz mit ".. Rand."
-		if ((!$randform and !$randkontur) and ($randherstellung or $randformal))
-			$list .= ' Rand';
+		$shape    = post(SectionBorder::KEY_BORDER_SHAPE);
+		$contour  = post(SectionBorder::KEY_BORDER_CONTOUR);
+		$assembly = post(SectionBorder::KEY_BORDER_ASSEMBLY);
+		$formal   = post(SectionBorder::KEY_BORDER_FORMAL);
+		if ((!$shape and !$contour) and ($assembly or $formal))
+			$list .= " Rand";
+
 		return $list ? "<strong>Beschreibung:</strong> {$list}.<br>" : '';
 	}
 
@@ -996,62 +984,62 @@ class Form {
 		$html .= '</div>'.PHP_EOL;
 
 
-		$html .= $this->getSection('Randbereich', 27);
-		$html .= '<div>';
-
-		$html .= $this->getBox('Mündung', '<div style="float:left;margin-right: 10px;">'.$this->getTextInput('rand_muendung') . '</div> z. B. runde, kleeblattförmige, vierpassförmige, viereckige, dreieckige.');
-		$html .= '<div class="space clear"></div>';
-
-		$input = new Choice('rand_formal');
-		$input->addChoice('gerundet');
-		$input->addChoice('gekehlt');
-		$input->addChoice('flach');
-		$input->addChoice('spitz');
-		$input->addChoice('gerillt');
-		$input->addChoice('gekantet');
-		$html .= $this->getBox('Formalbeschreibung', $input->getHtml());
-
-		$input = new Choice('rand_herstellung');
-		$input->addChoice('abgeschnitten');
-		$input->addChoice('zugeschnitten');
-		$input->addChoice('beschnitten', 'beschnitten (Draht, Schnur, Messer)');
-		$input->addChoice('abgestrichen', 'abgestrichen (Finger, Schwamm, Holzstück)');
-		$input->addChoice('gerillt');
-		$input->addChoice('gekantet');
-		$html .= $this->getBox('Herstellungstechnische Beschreibung', $input->getHtml());
-		$html .= '<div class="space clear"></div>';
-
-		$input = new Choice('rand_form');
-		$input->addChoice('nicht verstärkter Rand');
-		$input->addChoice('aufgestellter Rand');
-		$input->addChoice('verstärkter Rand');
-		$input->addChoice('Keulenrand');
-		$input->addChoice('Wulstrand');
-		$input->addChoice('Leistenrand');
-		$input->addChoice('Kragenrand');
-		$input->addChoice('Kremprand');
-		$input->addChoice('Rollrand');
-		$input->addChoice('Sichelrand');
-		$html .= $this->getBox('Randform', $input->getHtml());
-
-		$input = new Choice('rand_kontur');
-		$input->addChoice('vertikaler Rand');
-		$input->addChoice('ausladender Rand');
-		$input->addChoice('steil ausladender Rand');
-		$input->addChoice('flach ausladender Rand');
-		$input->addChoice('einziehender Rand');
-		$input->addChoice('steil einziehender Rand');
-		$input->addChoice('flach einziehender Rand');
-		$input->addChoice('umgebogener Rand');
-		$input->addChoice('umgeklappter Rand');
-		$input->addChoice('untergriffiger Rand');
-		$input->addChoice('unterschnittener Rand');
-		$input->addChoice('eingerollter Rand');
-		$input->addChoice('profilierter Rand');
-		$input->addChoice('Fahne');
-		$html .= $this->getBox('Randkontur', $input->getHtml());
-
-		$html .= '</div>';
+// 		$html .= $this->getSection('Randbereich', 27);
+// 		$html .= '<div>';
+//
+// 		$html .= $this->getBox('Mündung', '<div style="float:left;margin-right: 10px;">'.$this->getTextInput('rand_muendung') . '</div> z. B. runde, kleeblattförmige, vierpassförmige, viereckige, dreieckige.');
+// 		$html .= '<div class="space clear"></div>';
+//
+// 		$input = new Choice('rand_formal');
+// 		$input->addChoice('gerundet');
+// 		$input->addChoice('gekehlt');
+// 		$input->addChoice('flach');
+// 		$input->addChoice('spitz');
+// 		$input->addChoice('gerillt');
+// 		$input->addChoice('gekantet');
+// 		$html .= $this->getBox('Formalbeschreibung', $input->getHtml());
+//
+// 		$input = new Choice('rand_herstellung');
+// 		$input->addChoice('abgeschnitten');
+// 		$input->addChoice('zugeschnitten');
+// 		$input->addChoice('beschnitten', 'beschnitten (Draht, Schnur, Messer)');
+// 		$input->addChoice('abgestrichen', 'abgestrichen (Finger, Schwamm, Holzstück)');
+// 		$input->addChoice('gerillt');
+// 		$input->addChoice('gekantet');
+// 		$html .= $this->getBox('Herstellungstechnische Beschreibung', $input->getHtml());
+// 		$html .= '<div class="space clear"></div>';
+//
+// 		$input = new Choice('rand_form');
+// 		$input->addChoice('nicht verstärkter Rand');
+// 		$input->addChoice('aufgestellter Rand');
+// 		$input->addChoice('verstärkter Rand');
+// 		$input->addChoice('Keulenrand');
+// 		$input->addChoice('Wulstrand');
+// 		$input->addChoice('Leistenrand');
+// 		$input->addChoice('Kragenrand');
+// 		$input->addChoice('Kremprand');
+// 		$input->addChoice('Rollrand');
+// 		$input->addChoice('Sichelrand');
+// 		$html .= $this->getBox('Randform', $input->getHtml());
+//
+// 		$input = new Choice('rand_kontur');
+// 		$input->addChoice('vertikaler Rand');
+// 		$input->addChoice('ausladender Rand');
+// 		$input->addChoice('steil ausladender Rand');
+// 		$input->addChoice('flach ausladender Rand');
+// 		$input->addChoice('einziehender Rand');
+// 		$input->addChoice('steil einziehender Rand');
+// 		$input->addChoice('flach einziehender Rand');
+// 		$input->addChoice('umgebogener Rand');
+// 		$input->addChoice('umgeklappter Rand');
+// 		$input->addChoice('untergriffiger Rand');
+// 		$input->addChoice('unterschnittener Rand');
+// 		$input->addChoice('eingerollter Rand');
+// 		$input->addChoice('profilierter Rand');
+// 		$input->addChoice('Fahne');
+// 		$html .= $this->getBox('Randkontur', $input->getHtml());
+//
+// 		$html .= '</div>';
 
 
 

@@ -28,6 +28,17 @@ class BasicsSection extends AccordionSection
 
 	public function show_content()
 	{
+?>
+		<table style="width:auto;">
+			<tr>
+				<td><?php $this->show_basic(); ?></td>
+			</tr>
+		</table>
+<?php
+	}
+
+	public function show_basic()
+	{
 		$input = new Choice('basics_ceramic_category', false);
 		$input->addChoice('Irdenware', false, true);
 		$input->addChoice('Fayence');

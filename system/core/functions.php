@@ -21,9 +21,10 @@
 
 /** Get POST value or false if does not exist.
  * @param key the variable name.
+ * @param default the default value if variable is not set.
  * @returns string value on success or false if variable not set.
  */
-function post($key)
+function post($key, $default = false)
 {
 	if (isset($_POST[$key])) {
 		if (is_array($_POST[$key])) {
@@ -35,7 +36,7 @@ function post($key)
 		}
 		return filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
 	}
-	return false;
+	return $default;
 }
 
 /** Optional translation. */

@@ -48,11 +48,11 @@ class Box
 	{
 		$style = '';
 		if ($this->float) $style = 'float:left; padding-right:25px;';
-		echo "\t<div id=\"{$this->id}_box\" style=\"$style\">".PHP_EOL;
-		echo "\t\t<h4 id=\"{$this->id}_box_title\">{$this->title}</h4>".PHP_EOL;
-		echo "\t\t<p id=\"{$this->id}_box_content\">".PHP_EOL;
+		echo "\t<fieldset id=\"{$this->id}_box\" style=\"$style\">".PHP_EOL;
+		echo "\t\t<legend id=\"{$this->id}_box_title\">{$this->title}</legend>".PHP_EOL;
+// 		echo "\t\t<div style=\"float:left;\" id=\"{$this->id}_box_content\">".PHP_EOL;
 		echo "\t\t\t{$this->content}".PHP_EOL;
-		echo "\t\t</p>".PHP_EOL;
-		echo "\t</div>".PHP_EOL;
+// 		echo "\t\t</div>".PHP_EOL;
+		echo "\t</fieldset>".PHP_EOL;
 	}
 }
