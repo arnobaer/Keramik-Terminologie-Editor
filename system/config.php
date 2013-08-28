@@ -41,6 +41,7 @@ require_once SYS_PATH . '/section_fracture.php';
 require_once SYS_PATH . '/section_border.php';
 require_once SYS_PATH . '/section_wall.php';
 require_once SYS_PATH . '/section_bottom.php';
+require_once SYS_PATH . '/section_dimensions.php';
 require_once SYS_PATH . '/section_functionals.php';
 require_once SYS_PATH . '/section_usewear.php';
 require_once SYS_PATH . '/section_condition.php';

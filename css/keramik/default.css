@@ -167,6 +167,10 @@ table td {
 
 /* Section specific settings. */
 
+#dimensions_container input[type=text] {
+    width: 50px!important;
+}
+
 #text_key_condition_fragments_count {
     text-align: right;
 }

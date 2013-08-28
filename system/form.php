@@ -70,6 +70,7 @@ class Form {
 		$section_border       = new SectionBorder();
 		$section_wall         = new SectionWall();
 		$section_bottom       = new SectionBottom();
+		$sections_dimensions  = new SectionDimensions();
 		$section_functionals  = new SectionFunctionals();
 		$section_usewear      = new SectionUsewear();
 		$section_condition    = new SectionCondition();
@@ -81,6 +82,7 @@ class Form {
 		$this->accordion->add_section($section_border);
 		$this->accordion->add_section($section_wall);
 		$this->accordion->add_section($section_bottom);
+		$this->accordion->add_section($sections_dimensions);
 		$this->accordion->add_section($section_functionals);
 		$this->accordion->add_section($section_usewear);
 		$this->accordion->add_section($section_condition);
@@ -461,34 +463,34 @@ class Form {
 	// -------------------------------------------------------------------------
 
 	public function getRanddurchmesser() {
-		$cm = $this->getCentimeters($this->getPost('randdurchmesser'));
+		$cm = $this->getCentimeters(post(SectionDimensions::KEY_RIM));
 		return $cm ? ("Randdm. {$cm}") : '';
 	}
 
 	public function getMaximaldurchmesser() {
-		$cm = $this->getCentimeters($this->getPost('maximaldurchmesser'));
+		$cm = $this->getCentimeters(post(SectionDimensions::KEY_MAXIMUM));
 		return $cm ? ("max. Dm. {$cm}") : '';
 	}
 
 	public function getBodendurchmesser() {
-		$cm = $this->getCentimeters($this->getPost('bodendurchmesser'));
+		$cm = $this->getCentimeters(post(SectionDimensions::KEY_BOTTOM));
 		return $cm ? ("Bodendm. {$cm}") : '';
 	}
 
 	public function getWandstaerke() {
-		$cm = $this->getCentimeterRange($this->getPost('wandstaerke'));
+		$cm = $this->getCentimeterRange(post(SectionDimensions::KEY_WALL_THICKNESS));
 		return $cm ? ("Wandst. {$cm}") : '';
 	}
 
 	public function getHoehe() {
-		$cm = $this->getCentimeters($this->getPost('hoehe'));
-		$zustand = $this->getPost('condition_fragmentation');
+		$cm = $this->getCentimeters(post(SectionDimensions::KEY_HEIGHT));
+		$zustand = post('condition_fragmentation');
 		$erh = ($zustand == 'vollständig erh.' or $zustand == '') ? '' : 'erh. ';
 		return $cm ? ("{$erh}H. {$cm}") : '';
 	}
 
 	public function getRanderhalt() {
-		$percent = $this->getPercent($this->getPost('randerhalt'));
+		$percent = $this->getPercent(post(SectionDimensions::KEY_RIM_PRESERVED));
 		return $percent ? ("{$percent} Randerhalt") : '';
 	}
 
@@ -1089,50 +1091,50 @@ class Form {
 // 		$html .= '</div>'.PHP_EOL;
 
 
-		$html .= $this->getSection('Massangaben', 34);
-		$html .= '<div>'.PHP_EOL;
-
-		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$html .= $this->getTextInput('randdurchmesser', 'Randdurchmesser (cm)');
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$html .= $this->getTextInput('maximaldurchmesser', 'Maximaldurchmesser (cm)');
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$html .= $this->getTextInput('bodendurchmesser', 'Bodendurchmesser (cm)');
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$html .= $this->getTextInput('wandstaerke', 'Wandstärke von&ndash;bis (cm)');
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$html .= $this->getTextInput('hoehe', '(erh.) Höhe (cm)');
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$html .= $this->getTextInput('randerhalt', 'Randerhalt (%)');
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div style="clear:both;padding-top:1px;">'.PHP_EOL;
-		$html .= '<p><strong>Don\'t care!</strong> Eingaben jeglicher Art mit und ohne Komma und Einheit oder ungültige Zeichen werden automatisch gefiltert und formatiert!</p>'.PHP_EOL;
-		$html .= '</div>';
-
-		$html .= '</div>'.PHP_EOL; // Massangaben
+// 		$html .= $this->getSection('Massangaben', 34);
+// 		$html .= '<div>'.PHP_EOL;
+//
+// 		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$html .= $this->getTextInput('randdurchmesser', 'Randdurchmesser (cm)');
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$html .= $this->getTextInput('maximaldurchmesser', 'Maximaldurchmesser (cm)');
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$html .= $this->getTextInput('bodendurchmesser', 'Bodendurchmesser (cm)');
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$html .= $this->getTextInput(SectionDimensions::KEY_WALL_THICKNESS, 'Wandstärke von&ndash;bis (cm)');
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$html .= $this->getTextInput('hoehe', '(erh.) Höhe (cm)');
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div style="float:left;margin-right:20px;">'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$html .= $this->getTextInput('randerhalt', 'Randerhalt (%)');
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div style="clear:both;padding-top:1px;">'.PHP_EOL;
+// 		$html .= '<p><strong>Don\'t care!</strong> Eingaben jeglicher Art mit und ohne Komma und Einheit oder ungültige Zeichen werden automatisch gefiltert und formatiert!</p>'.PHP_EOL;
+// 		$html .= '</div>';
+//
+// 		$html .= '</div>'.PHP_EOL; // Massangaben
 
 
 // 		$html .= $this->getSection('Funktionselemente', 35);
