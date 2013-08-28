@@ -19,11 +19,15 @@
  *
  */
 
-class BasicsSection extends AccordionSection
+class SectionBasics extends AccordionSection
 {
 	public function __construct()
 	{
-		parent::__construct('basics', "Grundlagen", 10);
+		parent::__construct(
+			'basics',     // Element id
+			"Grundlagen", // Section title
+			10            // Page number
+		);
 	}
 
 	public function show_content()

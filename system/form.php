@@ -65,23 +65,23 @@ class Form {
 		$this->munsell = new MunsellSoilColors();
 
 		// Create accordion sections.
-		$basics_section = new BasicsSection();
-		$section_fracture = new SectionFracture();
-		$section_border = new SectionBorder();
-		$section_wandbereich = new Wandbereich();
-		$section_bodenbereich = new Bodenbereich();
-		$section_funktionselemente = new Funktionselemente();
-		$section_usewear = new SectionUsewear();
-		$section_condition = new SectionCondition();
+		$section_basics       = new SectionBasics();
+		$section_fracture     = new SectionFracture();
+		$section_border       = new SectionBorder();
+		$section_wall         = new SectionWall();
+		$section_bottom       = new SectionBottom();
+		$section_functionals  = new SectionFunctionals();
+		$section_usewear      = new SectionUsewear();
+		$section_condition    = new SectionCondition();
 
 		// Create the input accordion.
 		$this->accordion = new Accordion('accordion');
-		$this->accordion->add_section($basics_section);
+		$this->accordion->add_section($section_basics);
 		$this->accordion->add_section($section_fracture);
 		$this->accordion->add_section($section_border);
-		$this->accordion->add_section($section_wandbereich);
-		$this->accordion->add_section($section_bodenbereich);
-		$this->accordion->add_section($section_funktionselemente);
+		$this->accordion->add_section($section_wall);
+		$this->accordion->add_section($section_bottom);
+		$this->accordion->add_section($section_functionals);
 		$this->accordion->add_section($section_usewear);
 		$this->accordion->add_section($section_condition);
 	}
@@ -292,8 +292,8 @@ class Form {
 
 	public function getBeschreibungLong() {
 		$list = array();
-		$list[] = Bodenbereich::get_long_description();
-		$list[] = Wandbereich::get_long_description();
+		$list[] = SectionBottom::get_long_description();
+		$list[] = SectionWall::get_long_description();
 		$list[] = SectionBorder::get_long_description();
 		$list = ucfirst(implode('; ', array_filter($list)));
 
@@ -331,13 +331,7 @@ class Form {
 	}
 
 	public function getFunktionselementeLong() {
-		$list = array();
-		$this->addPost($list, 'standvorrichtungen');
-		$handhaben = $this->getPost('handhaben');
-		if (is_array($handhaben) and sizeof($handhaben)) $list[] = implode(', ', $handhaben);
-		$handhaben_henkel = $this->getPost('handhaben_henkel');
-		if (is_array($handhaben_henkel) and sizeof($handhaben_henkel)) $list[] = implode(', ', $handhaben_henkel);
-		$list = ucfirst(implode('; ', $list));
+		$list = SectionFunctionals::get_long_description();
 		return $list ? "<strong>Funktionselemente:</strong> {$list}.<br>" : '';
 	}
 

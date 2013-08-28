@@ -19,20 +19,25 @@
  *
  */
 
-/** Object condition section.
-
-POST variables:
-
-	wandbereich_hals     - type of vessel neck.
-	wandbereich_schulter - type of vessel shoulder.
-	wandbereich_bauch    - type of vessel bulge.
-	wandbereich_fuss     - type of vessel foot.
-*/
-class Wandbereich extends AccordionSection
+/** Object wall zone section.*/
+class SectionWall extends AccordionSection
 {
+	// Used POST variable names.
+
+	const KEY_WALL_NECK     = 'KEY_WALL_NECK';
+	const KEY_WALL_SHOULDER = 'KEY_WALL_SHOULDER';
+	const KEY_WALL_BULGE    = 'KEY_WALL_BULGE';
+	const KEY_WALL_FOOT     = 'KEY_WALL_FOOT';
+
+	// Used variable values to be compared somewhere.
+
+	const VAL_NOT_SPECIFIED = 0;
 	public function __construct()
 	{
-		parent::__construct('wandbereich', "Wandbereich", 31);
+		parent::__construct(
+			'wallzone',    // Element id
+			"Wandbereich", // Section title
+			31);           // Page number
 	}
 
 	public function show_content()
@@ -40,20 +45,20 @@ class Wandbereich extends AccordionSection
 ?>
 		<table>
 			<tr>
-				<td><?php $this->show_hals(); ?></td>
-				<td><?php $this->show_schulter(); ?></td>
-				<td><?php $this->show_bauch(); ?></td>
-				<td><?php $this->show_fuss(); ?></td>
+				<td><?php $this->show_neck(); ?></td>
+				<td><?php $this->show_shoulder(); ?></td>
+				<td><?php $this->show_bulge(); ?></td>
+				<td><?php $this->show_foot(); ?></td>
 			</tr>
 		</table>
 <?php
 	}
 
 	/** Specify the vessel neck type. */
-	public function show_hals()
+	public function show_neck()
 	{
-		$input = new Choice('wandbereich_hals', false);
-		$input->addChoice(0, "keine Angabe");
+		$input = new Choice(self::KEY_WALL_NECK, false);
+		$input->addChoice(self::VAL_NOT_SPECIFIED, "keine Angabe");
 		$input->addChoice("stark einziehender Hals");
 		$input->addChoice("schwach einziehender Hals");
 		$input->addChoice("zylindrischer Hals");
@@ -64,9 +69,9 @@ class Wandbereich extends AccordionSection
 	}
 
 	/** Specify the vessel shoulder type. */
-	public function show_schulter()
+	public function show_shoulder()
 	{
-		$input = new Choice('wandbereich_schulter', false);
+		$input = new Choice(self::KEY_WALL_SHOULDER, false);
 		$input->addChoice(0, "keine Angabe");
 		$input->addChoice("flach ansteigende Schulter");
 		$input->addChoice("steil ansteigende Schulter");
@@ -76,9 +81,9 @@ class Wandbereich extends AccordionSection
 	}
 
 	/** Specify the vessel bulge type. */
-	public function show_bauch()
+	public function show_bulge()
 	{
-		$input = new Choice('wandbereich_bauch', false);
+		$input = new Choice(self::KEY_WALL_BULGE, false);
 		$input->addChoice(0, "keine Angabe");
 		$input->addChoice("zylindrischer Bauch");
 		$input->addChoice("ellipsoider Bauch");
@@ -91,9 +96,9 @@ class Wandbereich extends AccordionSection
 	}
 
 	/** Specify the vessel foot type. */
-	public function show_fuss()
+	public function show_foot()
 	{
-		$input = new Choice('wandbereich_fuss');
+		$input = new Choice(self::KEY_WALL_FOOT);
 		$input->addChoice("einziehender Fuß");
 		$input->addChoice("ausladende Fußzone");
 		$input->addChoice("zylindrische Fußzone");
@@ -107,10 +112,10 @@ class Wandbereich extends AccordionSection
 	{
 		$list = array();
 
-		$list[] = self::getPost('wandbereich_fuss');
-		$list[] = self::getPost('wandbereich_bauch');
-		$list[] = self::getPost('wandbereich_schulter');
-		$list[] = self::getPost('wandbereich_hals');
+		$list[] = post(self::KEY_WALL_FOOT);
+		$list[] = post(self::KEY_WALL_BULGE);
+		$list[] = post(self::KEY_WALL_SHOULDER);
+		$list[] = post(self::KEY_WALL_NECK);
 
 		$list = array_filter($list);
 

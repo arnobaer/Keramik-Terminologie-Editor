@@ -19,20 +19,27 @@
  *
  */
 
-/** Object condition section.
-
-POST variables:
-
-	wandbereich_hals     - type of vessel neck.
-	wandbereich_schulter - type of vessel shoulder.
-	wandbereich_bauch    - type of vessel bulge.
-	wandbereich_fuss     - type of vessel foot.
+/** Object functionals section.
 */
-class Funktionselemente extends AccordionSection
+class SectionFunctionals extends AccordionSection
 {
+	// Used POST variable names.
+
+	const KEY_FOOT    = 'KEY_FUNCTIONALS_FOOT';
+	const KEY_HANDLES = 'KEY_FUNCTIONALS_HANDLES';
+	const KEY_BAIL    = 'KEY_FUNCTIONALS_BAIL';
+
+	// Used variable values to be compared somewhere.
+
+	const VAL_NOT_SPECIFIED = 0;
+
 	public function __construct()
 	{
-		parent::__construct('funktionselemente', "Funktionselemente", 35);
+		parent::__construct(
+			'functionals',       // Element id
+			"Funktionselemente", // Section title
+			35                   // Page number
+		);
 	}
 
 	public function show_content()
@@ -51,8 +58,8 @@ class Funktionselemente extends AccordionSection
 	/** Specify foot type. */
 	public function show_standvorrichtungen()
 	{
-		$input = new Choice('standvorrichtungen', false);
-		$input->addChoice(0, "keine Angabe");
+		$input = new Choice(self::KEY_FOOT, false);
+		$input->addChoice(self::VAL_NOT_SPECIFIED, "keine Angabe");
 		$input->addChoice("Hohlfuß");
 		$input->addChoice("Massivfuß");
 		$input->addChoice("zapfenförmiger Massivfuß");
@@ -60,32 +67,32 @@ class Funktionselemente extends AccordionSection
 		$input->addChoice("zylindrischer Massivfuß", "zylindrischer/amorpher Massivfuß");
 		$input->addChoice("Standring");
 
-		$box = new Box('standvorrichtungen', "Standvorrichtungen", $input->getHtml());
+		$box = new Box('functionals_foot', "Standvorrichtungen", $input->getHtml());
 		echo $box->show();
 	}
 
 	/** Specify handling zone type. */
 	public function show_handhaben()
 	{
-		$input = new MultiChoice('handhaben');
+		$input = new MultiChoice(self::KEY_HANDLES);
 		$input->addChoice("Grifflappen");
 		$input->addChoice("Knauf");
 		$input->addChoice("Knubbe");
 		$input->addChoice("Rohrgriff");
 		$input->addChoice("Stielgriff");
 
-		$box = new Box('handhaben', "Handhaben", $input->getHtml());
+		$box = new Box('functionals_handles', "Handhaben", $input->getHtml());
 		echo $box->show();
 	}
 
 	/** Specify handle type. */
 	public function show_handhaben_henkel()
 	{
-		$input = new MultiChoice('handhaben_henkel');
+		$input = new MultiChoice(self::KEY_BAIL);
 		$input->addChoice('Bandhenkel');
 		$input->addChoice('Wulsthenkel');
 
-		$box = new Box('handhaben_henkel', "Handhaben/Henkel", $input->getHtml());
+		$box = new Box('functionals_bail', "Handhaben/Henkel", $input->getHtml());
 		echo $box->show();
 	}
 
@@ -94,13 +101,15 @@ class Funktionselemente extends AccordionSection
 	{
 		$list = array();
 
-		$list[] = self::getPost('wandbereich_fuss');
-		$list[] = self::getPost('wandbereich_bauch');
-		$list[] = self::getPost('wandbereich_schulter');
-		$list[] = self::getPost('wandbereich_hals');
+		$list[] = post(self::KEY_FOOT);
+		$handhaben = post(self::KEY_HANDLES);
 
+		if (is_array($handhaben) and sizeof($handhaben)) $list[] = implode(', ', $handhaben);
+		$handhaben_henkel = post(self::KEY_BAIL);
+
+		if (is_array($handhaben_henkel) and sizeof($handhaben_henkel)) $list[] = implode(', ', $handhaben_henkel);
 		$list = array_filter($list);
 
-		return implode("; ", $list);
+		return ucfirst(implode('; ', $list));
 	}
 }

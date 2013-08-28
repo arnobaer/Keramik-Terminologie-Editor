@@ -20,16 +20,24 @@
  */
 
 /** Object condition section.
-
-POST variables:
-
-	bodenbereich_boden    - type of vessel bottom.
 */
-class Bodenbereich extends AccordionSection
+class SectionBottom extends AccordionSection
 {
+	// Used POST variable names.
+
+	const KEY_BOTTOM    = 'KEY_BOTTOM';
+
+	// Used variable values to be compared somewhere.
+
+	const VAL_NOT_SPECIFIED = 0;
+
 	public function __construct()
 	{
-		parent::__construct('bodenbereich', "Bodenbereich", 34);
+		parent::__construct(
+			'bottomzone',   // Element id
+			"Bodenbereich", // Section title
+			34              // Page number
+		);
 	}
 
 	public function show_content()
@@ -37,16 +45,16 @@ class Bodenbereich extends AccordionSection
 ?>
 		<table style="width:auto;">
 			<tr>
-				<td><?php $this->show_boden(); ?></td>
+				<td><?php $this->show_bottom(); ?></td>
 			</tr>
 		</table>
 <?php
 	}
 
-	/** Specify the vessel neck type. */
-	public function show_boden()
+	/** Specify the vessel bottom type. */
+	public function show_bottom()
 	{
-		$input = new Choice('bodenbereich_boden', false);
+		$input = new Choice(self::KEY_BOTTOM, false);
 		$input->addChoice(0, "keine Angabe");
 		$input->addChoice("Flachboden");
 		$input->addChoice("minimal nach oben gewölbter Flachboden", "Flachboden, min. n. oben gewölbt");
@@ -54,7 +62,7 @@ class Bodenbereich extends AccordionSection
 		$input->addChoice("Konkavboden");
 		$input->addChoice("aus der Masse gedrehter Standring");
 
-		$box = new Box('boden', "Bodenformen", $input->getHtml());
+		$box = new Box('bottom', "Bodenformen", $input->getHtml());
 		echo $box->show();
 	}
 
@@ -63,7 +71,7 @@ class Bodenbereich extends AccordionSection
 	{
 		$list = array();
 
-		$list[] = self::getPost('bodenbereich_boden');
+		$list[] = post(self::KEY_BOTTOM);
 
 		$list = array_filter($list);
 

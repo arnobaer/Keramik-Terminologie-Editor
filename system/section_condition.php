@@ -51,7 +51,7 @@ class SectionCondition extends AccordionSection
 	public function __construct()
 	{
 		parent::__construct(
-			'erhaltungszustand', // Element id
+			'condition',         // Element id
 			"Erhaltungszustand", // Section title
 			false                // Page number
 		);

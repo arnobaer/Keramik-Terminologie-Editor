@@ -49,7 +49,7 @@ class TextInput {
 		$value = $this->getPost($this->_key);
 		$value = $value ? $value : '';
 		$id = strtolower(str_replace(' ', '_', "text_{$this->_key}"));
-		$style = $this->_style ? ' style="float:left; '.$this->_style.'"':'';
+		$style = $this->_style ? $this->_style.'"':'';
 		$size = ($this->_size ? " size=\"{$this->_size}\"" : '');
 		$maxlength = ($this->_size ? " maxlength=\"{$this->_size}\"" : '');
 		$html = ($label ? "<label for=\"{$id}\">" : '');

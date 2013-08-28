@@ -54,7 +54,7 @@
 
 <div class="ui-widget footer">
 	<p><em>Keramik Terminologie Editor</em> ist freie, unter der <a href="http://www.gnu.org/licenses/gpl-3.0.txt">GNU/GPL-Lizenz 3.0</a> veröffentlichte Software.<br>
-	Copyleft 2012&ndash;<?php echo date('Y'); ?> Bernhard R. Arnold</p>
+	Copyright &copy; 2012&ndash;2013 Bernhard R. Arnold</p>
 </div>
 
 </div>

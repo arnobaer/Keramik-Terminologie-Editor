@@ -18,6 +18,7 @@
  */
 
 body{
+	/* Well, sadly, most of the archeologists work on Windows OS. */
 	font: 62.5% "Trebuchet MS", sans-serif;
 	font-size: .7em;
 	margin: 50px;
@@ -51,14 +52,32 @@ p a:hover {
 	color: #a00;
 	border-bottom: 1px solid #a00;
 }
+
+/* Form specific configuration. */
+
 fieldset {
+	margin-bottom: 10px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	margin-bottom: 10px;
 }
 legend {
 	font-weight: bold;
 }
+label {
+	display: block;
+}
+input,
+textarea {
+}
+input[type=text],
+textarea {
+	padding: 3px 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+/* Manipulators. */
+
 .space {
 	margin-bottom: 20px;
 }
@@ -75,6 +94,9 @@ legend {
 	text-align: center;
 	color: #888;
 }
+
+/* jQuery specific. */
+
 #dialog-link {
 	padding: .4em 1em .4em 20px;
 	text-decoration: none;
@@ -109,10 +131,7 @@ legend {
 #accordion h3 em {
 	float: right;
 }
-label {
-	display:block;
-	line-height: 1.5em;
-}
+
 div.description div {
 	border: 1px solid #bbb;
 	border-radius: 4px;
@@ -126,6 +145,7 @@ div.description div {
 	padding: 10px;
 	border-radius: 10px;
 }
+
 table {
 	width: 100%;
 	white-space: nowrap;
@@ -133,16 +153,9 @@ table {
 table td * {
 	white-space: normal;
 }
-table td, table td * {
-    vertical-align: top;
-}
 table td {
+	vertical-align: top;
 	padding: 0 5px;
-}
-input[type=text],
-textarea {
-	border: 1px solid #ccc;
-	border-radius: 4px;
 }
 
 .infobox {
@@ -150,4 +163,10 @@ textarea {
 	border-radius:5px;
 	background-color:#ffd;
 	padding: 7px;
+}
+
+/* Section specific settings. */
+
+#text_key_condition_fragments_count {
+    text-align: right;
 }
