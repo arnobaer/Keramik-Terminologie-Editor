@@ -77,4 +77,10 @@ class SectionBottom extends AccordionSection
 
 		return implode(", ", $list);
 	}
+
+	/** Returns short formal description. */
+	static public function get_short_description()
+	{
+		return '';
+	}
 }

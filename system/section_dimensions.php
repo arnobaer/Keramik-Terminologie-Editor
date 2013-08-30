@@ -19,16 +19,18 @@
  *
  */
 
+/** References to class SectionCondition.
+ */
 class SectionDimensions extends AccordionSection
 {
 	// Used POST variable names.
 
-	const KEY_RIM            = 'KEY_DIMENSIONS_RIM';
-	const KEY_MAXIMUM        = 'KEY_DIMENSIONS_MAXIMUM';
-	const KEY_BOTTOM         = 'KEY_DIMENSIONS_BOTTOM';
-	const KEY_WALL_THICKNESS = 'KEY_DIMENSIONS_WALL_THICKNESS';
-	const KEY_HEIGHT         = 'KEY_DIMENSIONS_HEIGHT';
-	const KEY_RIM_PRESERVED  = 'KEY_DIMENSIONS_KEY_RIM_PRESERVED';
+	const KEY_RIM            = 'dimensions_rim';
+	const KEY_MAXIMUM        = 'dimensions_maximum';
+	const KEY_BOTTOM         = 'dimensions_bottom';
+	const KEY_WALL_THICKNESS = 'dimensions_wallthickness';
+	const KEY_HEIGHT         = 'dimensions_height';
+	const KEY_RIM_PRESERVED  = 'dimensions_rimpreserved';
 
 	// Used variable values to be compared somewhere.
 
@@ -45,13 +47,18 @@ class SectionDimensions extends AccordionSection
 
 	public function show_content()
 	{
-		$html = '<p class="infobox" style="margin-top:7px;"><strong>Don\'t care!</strong> Eingaben jeglicher Art, mit und ohne Komma und Einheit oder ungültige Zeichen werden automatisch gefiltert und formatiert.</p>'.PHP_EOL;
+		$information = "<strong>Hinweis:</strong> ".
+			"Eingaben jeglicher Art, mit und ohne Komma und Einheit oder " .
+			"ungültige Zeichen werden automatisch gefiltert, gerundet und " .
+			"formatiert.";
+
+		$dimensions = '<p class="infobox" style="margin-top:7px;">'.$information.'</p>'.PHP_EOL;
 ?>
 		<table style="width:100%;">
 			<tr>
 				<td><?php $this->show_rim(); ?></td>
 				<td><?php $this->show_wall_thickness(); ?></td>
-				<td style="width:33%;"><?php echo $html; ?></td>
+				<td style="width:33%;"><?php echo $dimensions; ?></td>
 			</tr>
 		</table>
 <?php
@@ -80,5 +87,75 @@ class SectionDimensions extends AccordionSection
 
 		$box = new Box('dimensions_2', "Abmessungen", $input->getHtml().$input2->getHtml().$input3->getHtml());
 		echo $box->show();
+	}
+
+	public function rim_diameter()
+	{
+		$cm = str_centimeters(post(self::KEY_RIM));
+		return $cm ? ("Randdm. {$cm}") : '';
+	}
+
+	static public function maximum_diameter()
+	{
+		$cm = str_centimeters(post(self::KEY_MAXIMUM));
+		return $cm ? ("max. Dm. {$cm}") : '';
+	}
+
+	static public function bottom_diameter()
+	{
+		$cm = str_centimeters(post(self::KEY_BOTTOM));
+		return $cm ? ("Bodendm. {$cm}") : '';
+	}
+
+	static public function wall_thickness()
+	{
+		$cm = str_centimeters_range(post(self::KEY_WALL_THICKNESS));
+		return $cm ? ("Wandst. {$cm}") : '';
+	}
+
+	static public function height()
+	{
+		$cm = str_centimeters(post(self::KEY_HEIGHT));
+		$preserved = SectionCondition::is_complete_extent() ? '' : "erh. ";
+		return $cm ? ("{$preserved}H. {$cm}") : '';
+	}
+
+	static public function rim_preserved()
+	{
+		$percent = str_percent(post(self::KEY_RIM_PRESERVED));
+		return $percent ? ("{$percent} Randerhalt") : '';
+	}
+
+	/** Returns long detailed description. */
+	static public function get_long_description()
+	{
+		$dimensions = array();
+
+		$dimensions[] = self::height();
+
+		// Show preserved rim percent only if diameter is specified.
+		$rim_diameter = self::rim_diameter();
+		$rim_preserved = self::rim_preserved();
+		if ($rim_diameter and $rim_preserved)
+			$rim_diameter .= " ({$rim_preserved})";
+
+		$dimensions[] = $rim_diameter;
+		$dimensions[] = self::maximum_diameter();
+		$dimensions[] = self::bottom_diameter();
+		$dimensions[] = self::wall_thickness();
+
+		return implode(', ', array_filter($dimensions));
+	}
+
+	/** Returns short formal description. */
+	static public function get_short_description()
+	{
+		$dimensions = array();
+		$dimensions[] = self::height();
+		$dimensions[] = self::rim_diameter();
+		$dimensions[] = self::maximum_diameter();
+		$dimensions[] = self::bottom_diameter();
+		$dimensions[] = self::wall_thickness();
+		return implode(', ', array_filter($dimensions));
 	}
 }

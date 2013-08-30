@@ -21,6 +21,8 @@
 
 class SectionBasics extends AccordionSection
 {
+	const KEY_CATEGORY = 'basics_category';
+
 	public function __construct()
 	{
 		parent::__construct(
@@ -43,14 +45,26 @@ class SectionBasics extends AccordionSection
 
 	public function show_basic()
 	{
-		$input = new Choice('basics_ceramic_category', false);
+		$input = new Choice(self::KEY_CATEGORY, false);
 		$input->addChoice('Irdenware', false, true);
 		$input->addChoice('Fayence');
 		$input->addChoice('Steingut');
 		$input->addChoice('Steinzeug');
 		$input->addChoice('Porzellan');
 
-		$box = new Box('ceramic_category', "Keramikgattung", $input->getHtml());
+		$box = new Box('basics_category', "Keramikgattung", $input->getHtml());
 		echo $box->show();
+	}
+
+	/** Returns long detailed description. */
+	static public function get_long_description()
+	{
+		return '';
+	}
+
+	/** Returns short formal description. */
+	static public function get_short_description()
+	{
+		return '';
 	}
 }

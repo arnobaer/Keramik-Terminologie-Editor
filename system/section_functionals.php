@@ -25,9 +25,9 @@ class SectionFunctionals extends AccordionSection
 {
 	// Used POST variable names.
 
-	const KEY_FOOT    = 'KEY_FUNCTIONALS_FOOT';
-	const KEY_HANDLES = 'KEY_FUNCTIONALS_HANDLES';
-	const KEY_BAIL    = 'KEY_FUNCTIONALS_BAIL';
+	const KEY_FOOT    = 'key_functionals_foot';
+	const KEY_HANDLES = 'key_functionals_handles';
+	const KEY_BAIL    = 'key_functionals_bail';
 
 	// Used variable values to be compared somewhere.
 
@@ -111,5 +111,11 @@ class SectionFunctionals extends AccordionSection
 		$list = array_filter($list);
 
 		return ucfirst(implode('; ', $list));
+	}
+
+	/** Returns short formal description. */
+	static public function get_short_description()
+	{
+		return '';
 	}
 }

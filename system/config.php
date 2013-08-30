@@ -37,6 +37,7 @@ require_once SYS_PATH . '/text_area.php';
 require_once SYS_PATH . '/accordion.php';
 require_once SYS_PATH . '/accordion_section.php';
 require_once SYS_PATH . '/section_basics.php';
+require_once SYS_PATH . '/section_surface.php';
 require_once SYS_PATH . '/section_fracture.php';
 require_once SYS_PATH . '/section_border.php';
 require_once SYS_PATH . '/section_wall.php';

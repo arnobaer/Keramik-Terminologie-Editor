@@ -66,6 +66,7 @@ class Form {
 
 		// Create accordion sections.
 		$section_basics       = new SectionBasics();
+		$section_surface      = new SectionSurface();
 		$section_fracture     = new SectionFracture();
 		$section_border       = new SectionBorder();
 		$section_wall         = new SectionWall();
@@ -78,6 +79,7 @@ class Form {
 		// Create the input accordion.
 		$this->accordion = new Accordion('accordion');
 		$this->accordion->add_section($section_basics);
+		$this->accordion->add_section($section_surface);
 		$this->accordion->add_section($section_fracture);
 		$this->accordion->add_section($section_border);
 		$this->accordion->add_section($section_wall);
@@ -171,19 +173,19 @@ class Form {
 
 	public function getCentimeters($input, $suffix = 'cm') {
 		$input = str_replace(',', '.', $input); // Normalize comma.
-		preg_match_all('!\d+(?:\.\d+)?!', $input, $matches);
+		preg_match_all('!\d+(?:\.\d+)?|(?:\.\d+)!', $input, $matches);
 		return (sizeof($matches[0]) ? (str_replace('.', ',', round($matches[0][0], 1)).($suffix ? " {$suffix}" : '')) : false);
 	}
 
 	public function getCentimeterRange($input, $suffix = 'cm') {
 		$input = str_replace(',', '.', $input); // Normalize comma.
-		preg_match_all('!\d+(?:\.\d+)?!', $input, $matches);
+		preg_match_all('!\d+(?:\.\d+)?|(?:\.\d+)!', $input, $matches);
 		return (sizeof($matches[0]) ? str_replace('.', ',', (sizeof($matches[0]) > 1) ? round($matches[0][0], 1).'&ndash;'.$matches[0][1] : round($matches[0][0], 1)).($suffix ? " {$suffix}" : '') : false);
 	}
 
 	public function getPercent($input, $suffix = '%') {
 		$input = str_replace(',', '.', $input); // Normalize comma.
-		preg_match_all('!\d+(?:\.\d+)?!', $input, $matches);
+		preg_match_all('!\d+(?:\.\d+)?|(?:\.\d+)!', $input, $matches);
 		return (sizeof($matches[0]) ? (str_replace('.', ',', round($matches[0][0], 1)).($suffix ? "{$suffix}" : '')) : false);
 	}
 
@@ -348,7 +350,7 @@ class Form {
 	}
 
 	public function getMagerungsart() {
-		$ending = ($this->getPost('basics_ceramic_category') == 'Irdenware' ? 'e' : 'es');
+		$ending = (post(SectionBasics::KEY_CATEGORY) == 'Irdenware' ? 'e' : 'es');
 		$magerungsart = $this->getPost('magerungsart');
 		return $magerungsart ? $magerungsart.$ending : '';
 	}
@@ -443,7 +445,7 @@ class Form {
 		$oberflaeche = implode(', ', $list);
 		if ($this->getPost('oberflaechenstruktur_overwrite'))
 			$oberflaeche = $temp;
-		$oberflaeche = ucfirst($oberflaeche);
+		$oberflaeche = SectionSurface::get_long_description();
 		return $oberflaeche ? "<strong>Oberfläche:</strong> $oberflaeche.<br>".PHP_EOL : '';
 	}
 
@@ -453,8 +455,7 @@ class Form {
 	}
 
 	public function getScherbenhaerteLong() {
-		$hardness = $this->getPost('scherbenhaerte');
-		$hardness = ucfirst($hardness);
+		$hardness = SectionSurface::hardness();
 		return $hardness ? "<strong>Scherbenhärte:</strong> $hardness.<br>".PHP_EOL : '';
 	}
 
@@ -462,54 +463,9 @@ class Form {
 	//  Massangaben
 	// -------------------------------------------------------------------------
 
-	public function getRanddurchmesser() {
-		$cm = $this->getCentimeters(post(SectionDimensions::KEY_RIM));
-		return $cm ? ("Randdm. {$cm}") : '';
-	}
-
-	public function getMaximaldurchmesser() {
-		$cm = $this->getCentimeters(post(SectionDimensions::KEY_MAXIMUM));
-		return $cm ? ("max. Dm. {$cm}") : '';
-	}
-
-	public function getBodendurchmesser() {
-		$cm = $this->getCentimeters(post(SectionDimensions::KEY_BOTTOM));
-		return $cm ? ("Bodendm. {$cm}") : '';
-	}
-
-	public function getWandstaerke() {
-		$cm = $this->getCentimeterRange(post(SectionDimensions::KEY_WALL_THICKNESS));
-		return $cm ? ("Wandst. {$cm}") : '';
-	}
-
-	public function getHoehe() {
-		$cm = $this->getCentimeters(post(SectionDimensions::KEY_HEIGHT));
-		$zustand = post('condition_fragmentation');
-		$erh = ($zustand == 'vollständig erh.' or $zustand == '') ? '' : 'erh. ';
-		return $cm ? ("{$erh}H. {$cm}") : '';
-	}
-
-	public function getRanderhalt() {
-		$percent = $this->getPercent(post(SectionDimensions::KEY_RIM_PRESERVED));
-		return $percent ? ("{$percent} Randerhalt") : '';
-	}
-
 	public function getMasseLong() {
-		$html = array();
-		$temp = $this->getHoehe();
-		if ($temp) $html[] = $temp;
-		$temp = $this->getRanddurchmesser();
-		$temp2 = $this->getRanderhalt();
-		if ($temp and $temp2) $temp .= " ({$temp2})";
-		if ($temp) $html[] = $temp;
-		$temp = $this->getMaximaldurchmesser();
-		if ($temp) $html[] = $temp;
-		$temp = $this->getBodendurchmesser();
-		if ($temp) $html[] = $temp;
-		$temp = $this->getWandstaerke();
-		if ($temp) $html[] = $temp;
-		$html = implode(', ', $html);
-		return $html ? "<strong>Maße:</strong> $html.<br>".PHP_EOL : '';
+		$dimensions = SectionDimensions::get_long_description();
+		return $dimensions ? "<strong>Maße:</strong> $dimensions.<br>".PHP_EOL : '';
 	}
 
 	public function getLongDescription() {
@@ -528,10 +484,10 @@ class Form {
 		$magerungsart = $this->getMagerungsart();
 		if ($magerungsart) $list[] = $magerungsart;
 		$primaerbrand = $this->getPost('primaerbrand');
-		$ending = ($this->getPost('basics_ceramic_category') == 'Irdenware' ? 'e' : 'es');
+		$ending = (post(SectionBasics::KEY_CATEGORY) == 'Irdenware' ? 'e' : 'es');
 		if ($primaerbrand) $list[] = "{$primaerbrand}{$ending}";
 		$list = implode(', ', $list);
-		$html .= ucfirst((($list) ? "$list " : '').$this->getPost('basics_ceramic_category'));
+		$html .= ucfirst((($list) ? "$list " : '').post(SectionBasics::KEY_CATEGORY));
 		$html .= '.<br>';
 
 		$html .= $this->getHerstellungsspurenLong();
@@ -565,10 +521,10 @@ class Form {
 		$list[] = $this->getMagerungsart();
 
 		$primaerbrand = $this->getPost('primaerbrand');
-		$ending = ($this->getPost('basics_ceramic_category') == 'Irdenware' ? 'e' : 'es');
+		$ending = (post(SectionBasics::KEY_CATEGORY) == 'Irdenware' ? 'e' : 'es');
 		if ($primaerbrand) $list[] = "{$primaerbrand}{$ending}";
 		$list = implode(', ', $list);
-		$magerung = (($list) ? "$list " : '').$this->getPost('basics_ceramic_category');
+		$magerung = (($list) ? "$list " : '').post(SectionBasics::KEY_CATEGORY);
 		$farbe = $this->getScherbenfarbeShort();
 		if ($farbe) $magerung .= " $farbe";
 		$magerung2 = array();
@@ -582,24 +538,12 @@ class Form {
 		if ($temp) $magerung .= " ({$temp})";
 		// Havoc...
 		$magerung = $magerung ? array($magerung) : array();
-		$temp = $this->getPost('scherbenhaerte');
-		if ($temp) $magerung[] = "{$temp} gebrannt";
-		if (sizeof($magerung)) $html[] = implode(', ', $magerung);
+		$magerung[] = SectionSurface::get_short_description();
+		$html[] = implode(', ', array_filter($magerung));
 
-		$masse = array();
-		$temp = $this->getHoehe();
-		if ($temp) $masse[] = $temp;
-		$temp = $this->getRanddurchmesser();
-		if ($temp) $masse[] = $temp;
-		$temp = $this->getMaximaldurchmesser();
-		if ($temp) $masse[] = $temp;
-		$temp = $this->getBodendurchmesser();
-		if ($temp) $masse[] = $temp;
-		$temp = $this->getWandstaerke();
-		if ($temp) $masse[] = $temp;
-		if (sizeof($masse)) $html[] = implode(', ', $masse);
+		$html[] = SectionDimensions::get_short_description();
 
-		return implode('; ', $html).'.';
+		return implode('; ', array_filter($html)).'.';
 	}
 
 	public function getGenerateDescription()
@@ -621,7 +565,7 @@ class Form {
 
 	public function getSectionGrundlagen()
 	{
-		$input = new Choice('basics_ceramic_category', false);
+		$input = new Choice(SectionBasics::KEY_CATEGORY, false);
 		$input->addChoice('Irdenware', false, true);
 		$input->addChoice('Fayence');
 		$input->addChoice('Steingut');
@@ -755,44 +699,44 @@ class Form {
 		$html .= $this->getSectionMagerung();
 
 
-		$html .= $this->getSection('Oberfläche', 15);
-		$html .= '<div>';
-
-		$html .= '<div class="sixteen columns">'.PHP_EOL;
-		$html .= '<h4>Oberflächenstruktur</h4>'.PHP_EOL;
-		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
-		$input = new MultiChoice('oberflaechenstruktur');
-		$input->addChoice('glatt', 'glatt (haptisch)');
-		$input->addChoice('körnig', 'körnig (haptisch)');
-		$input->addChoice('kreidig', 'kreidig (haptisch)');
-		$input->addChoice('rau', 'rau (haptisch)');
-		$input->addChoice('seifig', 'seifig (haptisch)');
-		$input->addChoice('blasig', 'blasig (haptisch, optisch)');
-		$input->addChoice('löchrig', 'löchrig (optisch)');
-		$input->addChoice('rissig', 'rissig/schrundig (optisch)');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="eight columns omega"><p>'.PHP_EOL;
-		$html .= $this->getTextInput('oberflaechenstruktur_anmerkung', 'Anmerkung (optional)', '&lt;Auswahl&gt;[, &lt;Anmerkung&gt;].');
-		$input = new MultiChoice('oberflaechenstruktur_overwrite');
-		$input->addChoice('overwrite', 'Auswahl mit Anmerkung überschreiben');
-		$html .= '</p><p></p><p>'.$input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div class="sixteen columns">'.PHP_EOL;
-		$html .= '<h4>Scherbenhärte</h4>'.PHP_EOL;
-		$html .= '<p>'.PHP_EOL;
-		$input = new Choice('scherbenhaerte');
-		$input->addChoice('weich');
-		$input->addChoice('hart');
-		$input->addChoice('sehr hart');
-		$input->addChoice('klingend hart');
-		$html .= $input->getHtml();
-		$html .= '</p>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '</div>';
+// 		$html .= $this->getSection('Oberfläche', 15);
+// 		$html .= '<div>';
+//
+// 		$html .= '<div class="sixteen columns">'.PHP_EOL;
+// 		$html .= '<h4>Oberflächenstruktur</h4>'.PHP_EOL;
+// 		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
+// 		$input = new MultiChoice('oberflaechenstruktur');
+// 		$input->addChoice('glatt', 'glatt (haptisch)');
+// 		$input->addChoice('körnig', 'körnig (haptisch)');
+// 		$input->addChoice('kreidig', 'kreidig (haptisch)');
+// 		$input->addChoice('rau', 'rau (haptisch)');
+// 		$input->addChoice('seifig', 'seifig (haptisch)');
+// 		$input->addChoice('blasig', 'blasig (haptisch, optisch)');
+// 		$input->addChoice('löchrig', 'löchrig (optisch)');
+// 		$input->addChoice('rissig', 'rissig/schrundig (optisch)');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="eight columns omega"><p>'.PHP_EOL;
+// 		$html .= $this->getTextInput('oberflaechenstruktur_anmerkung', 'Anmerkung (optional)', '&lt;Auswahl&gt;[, &lt;Anmerkung&gt;].');
+// 		$input = new MultiChoice('oberflaechenstruktur_overwrite');
+// 		$input->addChoice('overwrite', 'Auswahl mit Anmerkung überschreiben');
+// 		$html .= '</p><p></p><p>'.$input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div class="sixteen columns">'.PHP_EOL;
+// 		$html .= '<h4>Scherbenhärte</h4>'.PHP_EOL;
+// 		$html .= '<p>'.PHP_EOL;
+// 		$input = new Choice('scherbenhaerte');
+// 		$input->addChoice('weich');
+// 		$input->addChoice('hart');
+// 		$input->addChoice('sehr hart');
+// 		$input->addChoice('klingend hart');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '</div>';
 
 // 		$html .= $this->getSection('Bruch', 15);
 // 		$html .= '<div>'.PHP_EOL;

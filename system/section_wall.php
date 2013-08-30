@@ -24,10 +24,10 @@ class SectionWall extends AccordionSection
 {
 	// Used POST variable names.
 
-	const KEY_WALL_NECK     = 'KEY_WALL_NECK';
-	const KEY_WALL_SHOULDER = 'KEY_WALL_SHOULDER';
-	const KEY_WALL_BULGE    = 'KEY_WALL_BULGE';
-	const KEY_WALL_FOOT     = 'KEY_WALL_FOOT';
+	const KEY_WALL_NECK     = 'wall_neck';
+	const KEY_WALL_SHOULDER = 'wall_shoulder';
+	const KEY_WALL_BULGE    = 'wall_bulge';
+	const KEY_WALL_FOOT     = 'wall_foot';
 
 	// Used variable values to be compared somewhere.
 
@@ -120,5 +120,11 @@ class SectionWall extends AccordionSection
 		$list = array_filter($list);
 
 		return implode("; ", $list);
+	}
+
+	/** Returns short formal description. */
+	static public function get_short_description()
+	{
+		return '';
 	}
 }

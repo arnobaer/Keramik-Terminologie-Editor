@@ -127,11 +127,22 @@ class SectionCondition extends AccordionSection
 		echo $box->show();
 	}
 
+	/** @returns type of fragmentation. */
+	static public function fragmentation()
+	{
+		return post(self::KEY_FRAGMENTATION);
+	}
 
+	/** @returns true if object is not fragmented. */
+	static public function is_complete_extent()
+	{
+		return self::fragmentation() == self::VAL_COMPLETE_EXTENT;
+	}
 
 	/** Returns long detailed description. */
-	static public function get_long_description() {
-		$fragmentation = post(self::KEY_FRAGMENTATION);
+	static public function get_long_description()
+	{
+		$fragmentation = self::fragmentation();
 		$fragments_count = intval(post(self::KEY_FRAGMENTS_COUNT));
 
 		// Get restoration conditions of object.
@@ -166,7 +177,8 @@ class SectionCondition extends AccordionSection
 	}
 
 	/** Returns short formal description. */
-	static public function get_short_description() {
+	static public function get_short_description()
+	{
 		$fragmentation = post(self::KEY_FRAGMENTATION);
 		$fragments_count = intval(post(self::KEY_FRAGMENTS_COUNT));
 		$result = $fragmentation;

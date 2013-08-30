@@ -60,8 +60,9 @@ abstract class AccordionSection
 		echo "\t</div>".PHP_EOL;
 	}
 
-	/** Get POST value or false if does not exist. */
-	static public function getPost($key) {
-		return isset($_POST[$key]) ? $_POST[$key] : false;
-	}
+	/** Returns long detailed description. Implement in derived class. */
+	abstract static public function get_long_description();
+
+	/** Returns short formal description. Implement in derived class. */
+	abstract static public function get_short_description();
 }
