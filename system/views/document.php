@@ -26,6 +26,7 @@
 	<title>Keramik Terminologie Editor</title>
 	<link href="css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 	<link href="css/keramik/default.css" rel="stylesheet">
+	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
 	<script src="js/jquery-1.9.1.js"></script>
 	<script src="js/jquery-ui-1.10.3.custom.js"></script>
 	<script src="js/keramik.js"></script>
