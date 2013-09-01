@@ -67,6 +67,7 @@ class Form {
 		// Create accordion sections.
 		$section_basics       = new SectionBasics();
 		$section_surface      = new SectionSurface();
+		$section_production   = new SectionProduction();
 		$section_fracture     = new SectionFracture();
 		$section_border       = new SectionBorder();
 		$section_wall         = new SectionWall();
@@ -80,6 +81,7 @@ class Form {
 		$this->accordion = new Accordion('accordion');
 		$this->accordion->add_section($section_basics);
 		$this->accordion->add_section($section_surface);
+		$this->accordion->add_section($section_production);
 		$this->accordion->add_section($section_fracture);
 		$this->accordion->add_section($section_border);
 		$this->accordion->add_section($section_wall);
@@ -319,19 +321,12 @@ class Form {
 	}
 
 	public function getHerstellungsspurenShort() {
-		$all = array();
-		$weich = $this->getPost('herstellungsspuren_weich');
-		$lederhart = $this->getPost('herstellungsspuren_lederhart');
-		$brandbedingt = $this->getPost('herstellungsspuren_brandbedingt');
-		if ($weich) $all[] = implode(', ', $weich ? $weich : array());
-		if ($lederhart) $all[] = implode(', ', $lederhart ? $lederhart : array());
-		if ($brandbedingt) $all[] = implode(', ', $brandbedingt ? $brandbedingt : array());
-		return implode(', ', $all);
+		return SectionProduction::get_short_description();
 	}
 
 	public function getHerstellungsspurenLong() {
-		$spuren = ucfirst($this->getHerstellungsspurenShort());
-		return $spuren ? "<strong>Herstellungsspuren:</strong> $spuren.<br>".PHP_EOL : '';
+		$marks = SectionProduction::get_long_description();
+		return $marks ? "<strong>Herstellungsspuren:</strong> $marks.<br>".PHP_EOL : '';
 	}
 
 	public function getFunktionselementeLong() {
@@ -340,7 +335,7 @@ class Form {
 	}
 
 	public function getSekundaereVeraenderungenShort() {
-		$spuren = $this->getPost('sekundaere_veraenderungen');
+		$spuren = SectionProduction::secondary_changes();
 		return $spuren ? lcfirst(rtrim($spuren, '.')) : '';
 	}
 
@@ -482,11 +477,14 @@ class Form {
 		$list = array();
 		$html .= '<strong>Keramikart:</strong> ';
 		$magerungsart = $this->getMagerungsart();
-		if ($magerungsart) $list[] = $magerungsart;
-		$primaerbrand = $this->getPost('primaerbrand');
+		$list[] = $magerungsart;
+		$forming = SectionProduction::forming();
+		if ($forming) $list[] = "{$forming}e";
+
+		$primary_burning = SectionProduction::primary_burning();
 		$ending = (post(SectionBasics::KEY_CATEGORY) == 'Irdenware' ? 'e' : 'es');
-		if ($primaerbrand) $list[] = "{$primaerbrand}{$ending}";
-		$list = implode(', ', $list);
+		if ($primary_burning) $list[] = "{$primary_burning}{$ending}";
+		$list = implode(', ', array_filter($list));
 		$html .= ucfirst((($list) ? "$list " : '').post(SectionBasics::KEY_CATEGORY));
 		$html .= '.<br>';
 
@@ -774,154 +772,154 @@ class Form {
 // 		$html .= '</div>'.PHP_EOL;
 
 
-		$html .= $this->getSection('Herstellung', 16);
-		$html .= '<div>'.PHP_EOL;
-
-		$html .= '<div class="sixteen columns">'.PHP_EOL;
-		$html .= '<h4>Methode der Formgebung</h4>'.PHP_EOL;
-		$html .= '<div class="six columns alpha"><p>'.PHP_EOL;
-		$input = new Choice('formgebung');
-		$input->addChoice('frei geformt', 'frei/ohne Verwendung einer Drehilfe geformt');
-		$input->addChoice('drehend geformt', 'langsam gedreht/drehend geformt');
-		$input->addChoice('drehend hochgezogen', 'schnell gedreht/drehend hochgezogen');
-		$input->addChoice('mit Formhilfe geformt');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$farbe_aussen_value = $this->getCleanColor('farbe_aussen', $farbe_aussen_valid, $farbe_aussen_munsell);
-		$farbe_aussen_value_2 = $this->getCleanColor('farbe_aussen_2', $farbe_aussen_valid_2, $farbe_aussen_munsell_2);
-		$farbe_bruch_value = $this->getCleanColor('farbe_bruch', $farbe_bruch_valid, $farbe_bruch_munsell);
-		$farbe_bruch_value_2 = $this->getCleanColor('farbe_bruch_2', $farbe_bruch_valid_2, $farbe_bruch_munsell_2);
-		$farbe_innen_value = $this->getCleanColor('farbe_innen', $farbe_innen_valid, $farbe_innen_munsell);
-		$farbe_innen_value_2 = $this->getCleanColor('farbe_innen_2', $farbe_innen_valid_2, $farbe_innen_munsell_2);
-
-		$html .= '<div class="sixteen columns">'.PHP_EOL;
-		$html .= '<h4>Brand: Farbe</h4>'.PHP_EOL;
-		$html .= '<p>Farbangaben nach Oyama und Takehara 1996 (Munsell), RAL oder Farbnamen. <strong>Don\'t care!</strong> Experimentelle automatische Formatierung.</p>'.PHP_EOL;
-		$html .= '<div class="five columns alpha"><h5>Oberfläche außen</h5><p>'.PHP_EOL;
-		$html .= '<input style="'.($farbe_aussen_valid?'':'color:red;').'" type="text" name="farbe_aussen" value="'.$farbe_aussen_value.'">';
-		$html .= 'bis';
-		$html .= '<input style="'.($farbe_aussen_valid_2?'':'color:red;').'" type="text" name="farbe_aussen_2" value="'.$farbe_aussen_value_2.'">';
-		$html .= '</p><h5>Farbverteilung</h5><p>';
-		$input = new Choice('farbverteilung_aussen');
-		$input->addChoice('gleichmäßig');
-		$input->addChoice('ungleichmäßig');
-		$input->addChoice('scharf begrenzte Farbzonen');
-		$input->addChoice('ineinander übergehende Farbzohnen');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="five columns alpha"><h5>Bruch</h5><p>'.PHP_EOL;
-		$html .= '<input style="'.($farbe_bruch_valid?'':'color:red;').'" type="text" name="farbe_bruch" value="'.$farbe_bruch_value.'">';
-		$html .= 'bis';
-		$html .= '<input style="'.($farbe_bruch_valid_2?'':'color:red;').'" type="text" name="farbe_bruch_2" value="'.$farbe_bruch_value_2.'">';
-		$html .= '</p><h5>Farbverteilung</h5><p>';
-		$input = new Choice('farbverteilung_bruch');
-		$input->addChoice('gleichmäßig');
-		$input->addChoice('ungleichmäßig');
-		$input->addChoice('scharf begrenzte Farbzonen');
-		$input->addChoice('ineinander übergehende Farbzohnen');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="six columns omega"><h5>Oberfläche innen</h5><p>'.PHP_EOL;
-		$html .= '<input style="'.($farbe_innen_valid?'':'color:red;').'" type="text" name="farbe_innen" value="'.$farbe_innen_value.'">';
-		$html .= 'bis';
-		$html .= '<input style="'.($farbe_innen_valid_2?'':'color:red;').'" type="text" name="farbe_innen_2" value="'.$farbe_innen_value_2.'">';
-		$html .= '</p><h5>Farbverteilung</h5><p>';
-		$input = new Choice('farbverteilung_innen');
-		$input->addChoice('gleichmäßig');
-		$input->addChoice('ungleichmäßig');
-		$input->addChoice('scharf begrenzte Farbzonen');
-		$input->addChoice('ineinander übergehende Farbzohnen');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div class="sixteen columns">'.PHP_EOL;
-		$html .= '<h4>Primärbrand</h4>'.PHP_EOL;
-		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
-		$input = new Choice('primaerbrand');
-		$input->addChoice('oxidierend gebrannt', 'Oxidationsbrand (rot/braun/gelblich)');
-		$input->addChoice('reduzierend gebrannt', 'Reduktionsbrand (grau/schwarz)');
-		$input->addChoice('oxidierend mit Reduktionskern gebrannt', 'Oxidationsbrand mit Reduktionskern');
-		$input->addChoice('reduzierend mit Oxidationskern gebrannt', 'Reduktionsbrand mit Oxidationskern');
-		$input->addChoice('mischbrandig', 'Mischbrand');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div class="eight columns">'.PHP_EOL;
-		$html .= '<h4>Herstellungsspuren am nicht ausgehärteten Ton</h4>'.PHP_EOL;
-		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
-		$input = new MultiChoice('herstellungsspuren_weich');
-		$input->addChoice('Abhebespur');
-		$input->addChoice('parallele Abschneidespuren', 'Abschneidespuren, paralell');
-		$input->addChoice('radiale Abschneidespuren', 'Abschneidespuren, radial');
-		$input->addChoice('Achsabdruck');
-		$input->addChoice('Bodenringfalte');
-		$input->addChoice('Drehrille');
-		$input->addChoice('Fingerabdruck');
-		$input->addChoice('Fingernagelabdruck');
-		$input->addChoice('Delle');
-		$input->addChoice('Formhilfenabdruck');
-		$input->addChoice('Formnaht');
-		$input->addChoice('Fügestelle', 'Naht-/Fügestelle');
-		$input->addChoice('Partikelkonzentration am Boden');
-		$input->addChoice('Quellrandboden');
-		$input->addChoice('Self-slip');
-		$input->addChoice('Verstreichspur');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div class="eight columns">'.PHP_EOL;
-		$html .= '<h4>Herstellungsspuren am "lederharten" Ton</h4>'.PHP_EOL;
-		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
-		$input = new MultiChoice('herstellungsspuren_lederhart');
-		$input->addChoice('Abdrehspuren');
-		$input->addChoice('Angarnierungsdruckspur');
-		$input->addChoice('Nachdrehspuren');
-		$input->addChoice('Trochnungseinschnitt', 'Trochnungseinschnitt/-stich');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div class="eight columns">'.PHP_EOL;
-		$html .= '<h4>Brandbedingte Herstellungsspuren</h4>'.PHP_EOL;
-		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
-		$input = new MultiChoice('herstellungsspuren_brandbedingt');
-		$input->addChoice('Brennhaut');
-		$input->addChoice('Brennhilfeabriss');
-		$input->addChoice('Brennriss');
-		$input->addChoice('Brennschatten');
-		$input->addChoice('Fehlbrand');
-		$input->addChoice('Glasurabriss');
-		$input->addChoice('metallischer Anflug', 'Metallischer Anflug');
-		$input->addChoice('Windflecken');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '<div class="sixteen columns">'.PHP_EOL;
-		$html .= '<h4>Sekundäre Veränderungen</h4>'.PHP_EOL;
-		$html .= '<div class="eight columns alpha"><p>'.PHP_EOL;
-		$html .= $this->getTextArea('sekundaere_veraenderungen');
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL;
-
-		$html .= '</div>'.PHP_EOL;
+// 		$html .= $this->getSection('Herstellung', 16);
+// 		$html .= '<div>'.PHP_EOL;
+//
+// 		$html .= '<div class="sixteen columns">'.PHP_EOL;
+// 		$html .= '<h4>Methode der Formgebung</h4>'.PHP_EOL;
+// 		$html .= '<div class="six columns alpha"><p>'.PHP_EOL;
+// 		$input = new Choice('formgebung');
+// 		$input->addChoice('frei geformt', 'frei/ohne Verwendung einer Drehilfe geformt');
+// 		$input->addChoice('drehend geformt', 'langsam gedreht/drehend geformt');
+// 		$input->addChoice('drehend hochgezogen', 'schnell gedreht/drehend hochgezogen');
+// 		$input->addChoice('mit Formhilfe geformt');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$farbe_aussen_value = $this->getCleanColor('farbe_aussen', $farbe_aussen_valid, $farbe_aussen_munsell);
+// 		$farbe_aussen_value_2 = $this->getCleanColor('farbe_aussen_2', $farbe_aussen_valid_2, $farbe_aussen_munsell_2);
+// 		$farbe_bruch_value = $this->getCleanColor('farbe_bruch', $farbe_bruch_valid, $farbe_bruch_munsell);
+// 		$farbe_bruch_value_2 = $this->getCleanColor('farbe_bruch_2', $farbe_bruch_valid_2, $farbe_bruch_munsell_2);
+// 		$farbe_innen_value = $this->getCleanColor('farbe_innen', $farbe_innen_valid, $farbe_innen_munsell);
+// 		$farbe_innen_value_2 = $this->getCleanColor('farbe_innen_2', $farbe_innen_valid_2, $farbe_innen_munsell_2);
+//
+// 		$html .= '<div class="sixteen columns">'.PHP_EOL;
+// 		$html .= '<h4>Brand: Farbe</h4>'.PHP_EOL;
+// 		$html .= '<p>Farbangaben nach Oyama und Takehara 1996 (Munsell), RAL oder Farbnamen. <strong>Don\'t care!</strong> Experimentelle automatische Formatierung.</p>'.PHP_EOL;
+// 		$html .= '<div class="five columns alpha"><h5>Oberfläche außen</h5><p>'.PHP_EOL;
+// 		$html .= '<input style="'.($farbe_aussen_valid?'':'color:red;').'" type="text" name="farbe_aussen" value="'.$farbe_aussen_value.'">';
+// 		$html .= 'bis';
+// 		$html .= '<input style="'.($farbe_aussen_valid_2?'':'color:red;').'" type="text" name="farbe_aussen_2" value="'.$farbe_aussen_value_2.'">';
+// 		$html .= '</p><h5>Farbverteilung</h5><p>';
+// 		$input = new Choice('farbverteilung_aussen');
+// 		$input->addChoice('gleichmäßig');
+// 		$input->addChoice('ungleichmäßig');
+// 		$input->addChoice('scharf begrenzte Farbzonen');
+// 		$input->addChoice('ineinander übergehende Farbzohnen');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="five columns alpha"><h5>Bruch</h5><p>'.PHP_EOL;
+// 		$html .= '<input style="'.($farbe_bruch_valid?'':'color:red;').'" type="text" name="farbe_bruch" value="'.$farbe_bruch_value.'">';
+// 		$html .= 'bis';
+// 		$html .= '<input style="'.($farbe_bruch_valid_2?'':'color:red;').'" type="text" name="farbe_bruch_2" value="'.$farbe_bruch_value_2.'">';
+// 		$html .= '</p><h5>Farbverteilung</h5><p>';
+// 		$input = new Choice('farbverteilung_bruch');
+// 		$input->addChoice('gleichmäßig');
+// 		$input->addChoice('ungleichmäßig');
+// 		$input->addChoice('scharf begrenzte Farbzonen');
+// 		$input->addChoice('ineinander übergehende Farbzohnen');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="six columns omega"><h5>Oberfläche innen</h5><p>'.PHP_EOL;
+// 		$html .= '<input style="'.($farbe_innen_valid?'':'color:red;').'" type="text" name="farbe_innen" value="'.$farbe_innen_value.'">';
+// 		$html .= 'bis';
+// 		$html .= '<input style="'.($farbe_innen_valid_2?'':'color:red;').'" type="text" name="farbe_innen_2" value="'.$farbe_innen_value_2.'">';
+// 		$html .= '</p><h5>Farbverteilung</h5><p>';
+// 		$input = new Choice('farbverteilung_innen');
+// 		$input->addChoice('gleichmäßig');
+// 		$input->addChoice('ungleichmäßig');
+// 		$input->addChoice('scharf begrenzte Farbzonen');
+// 		$input->addChoice('ineinander übergehende Farbzohnen');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div class="sixteen columns">'.PHP_EOL;
+// 		$html .= '<h4>Primärbrand</h4>'.PHP_EOL;
+// 		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
+// 		$input = new Choice('primaerbrand');
+// 		$input->addChoice('oxidierend gebrannt', 'Oxidationsbrand (rot/braun/gelblich)');
+// 		$input->addChoice('reduzierend gebrannt', 'Reduktionsbrand (grau/schwarz)');
+// 		$input->addChoice('oxidierend mit Reduktionskern gebrannt', 'Oxidationsbrand mit Reduktionskern');
+// 		$input->addChoice('reduzierend mit Oxidationskern gebrannt', 'Reduktionsbrand mit Oxidationskern');
+// 		$input->addChoice('mischbrandig', 'Mischbrand');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div class="eight columns">'.PHP_EOL;
+// 		$html .= '<h4>Herstellungsspuren am nicht ausgehärteten Ton</h4>'.PHP_EOL;
+// 		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
+// 		$input = new MultiChoice('herstellungsspuren_weich');
+// 		$input->addChoice('Abhebespur');
+// 		$input->addChoice('parallele Abschneidespuren', 'Abschneidespuren, paralell');
+// 		$input->addChoice('radiale Abschneidespuren', 'Abschneidespuren, radial');
+// 		$input->addChoice('Achsabdruck');
+// 		$input->addChoice('Bodenringfalte');
+// 		$input->addChoice('Drehrille');
+// 		$input->addChoice('Fingerabdruck');
+// 		$input->addChoice('Fingernagelabdruck');
+// 		$input->addChoice('Delle');
+// 		$input->addChoice('Formhilfenabdruck');
+// 		$input->addChoice('Formnaht');
+// 		$input->addChoice('Fügestelle', 'Naht-/Fügestelle');
+// 		$input->addChoice('Partikelkonzentration am Boden');
+// 		$input->addChoice('Quellrandboden');
+// 		$input->addChoice('Self-slip');
+// 		$input->addChoice('Verstreichspur');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div class="eight columns">'.PHP_EOL;
+// 		$html .= '<h4>Herstellungsspuren am "lederharten" Ton</h4>'.PHP_EOL;
+// 		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
+// 		$input = new MultiChoice('herstellungsspuren_lederhart');
+// 		$input->addChoice('Abdrehspuren');
+// 		$input->addChoice('Angarnierungsdruckspur');
+// 		$input->addChoice('Nachdrehspuren');
+// 		$input->addChoice('Trochnungseinschnitt', 'Trochnungseinschnitt/-stich');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div class="eight columns">'.PHP_EOL;
+// 		$html .= '<h4>Brandbedingte Herstellungsspuren</h4>'.PHP_EOL;
+// 		$html .= '<div class="five columns alpha"><p>'.PHP_EOL;
+// 		$input = new MultiChoice('herstellungsspuren_brandbedingt');
+// 		$input->addChoice('Brennhaut');
+// 		$input->addChoice('Brennhilfeabriss');
+// 		$input->addChoice('Brennriss');
+// 		$input->addChoice('Brennschatten');
+// 		$input->addChoice('Fehlbrand');
+// 		$input->addChoice('Glasurabriss');
+// 		$input->addChoice('metallischer Anflug', 'Metallischer Anflug');
+// 		$input->addChoice('Windflecken');
+// 		$html .= $input->getHtml();
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '<div class="sixteen columns">'.PHP_EOL;
+// 		$html .= '<h4>Sekundäre Veränderungen</h4>'.PHP_EOL;
+// 		$html .= '<div class="eight columns alpha"><p>'.PHP_EOL;
+// 		$html .= $this->getTextArea('sekundaere_veraenderungen');
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '<div class="four columns omega"><p>'.PHP_EOL;
+// 		$html .= '</p></div>'.PHP_EOL;
+// 		$html .= '</div>'.PHP_EOL;
+//
+// 		$html .= '</div>'.PHP_EOL;
 
 
 // 		$html .= $this->getSection('Randbereich', 27);

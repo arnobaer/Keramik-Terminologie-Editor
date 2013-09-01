@@ -122,14 +122,14 @@ function str_named_color($input)
 }
 
 /** Auto detect color code or name and return filtered string.
- * @param input any string containing a numeric information.
+ * @param name post.
  * @returns formatted string of color code or name.
  */
 function str_clean_color($name, &$valid, &$munsell)
 {
 	$valid = true;
 	$munsell = true;
-	$input = isset($_POST[$name]) ? $_POST[$name] : false;
+	$input = post($name);
 	if (!$input) return '';
 	$color = $this->getMunsellColor($input);
 	if ($color)
