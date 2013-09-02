@@ -57,15 +57,14 @@ class Form {
 
 	public function __construct() {
 		$this->initPost();
-		if ($this->getPost(Request::Reset)) {
+		if (post(Request::Reset)) {
 			$this->post = array();
 			$_POST = array();
 		}
-		$this->session = $this->getPost('session') ? $this->getPost('session') : uniqid();
+		$this->session = post('session') ? post('session') : uniqid();
 		$this->munsell = new MunsellSoilColors();
 
 		// Create accordion sections.
-		$section_basics       = new SectionBasics();
 		$section_surface      = new SectionSurface();
 		$section_production   = new SectionProduction();
 		$section_fracture     = new SectionFracture();
@@ -75,11 +74,13 @@ class Form {
 		$sections_dimensions  = new SectionDimensions();
 		$section_functionals  = new SectionFunctionals();
 		$section_usewear      = new SectionUsewear();
+		$section_primitive    = new SectionPrimitive();
 		$section_condition    = new SectionCondition();
 
 		// Create the input accordion.
 		$this->accordion = new Accordion('accordion');
-		$this->accordion->add_section($section_basics);
+		$this->accordion->add_section(new SectionGrundlagen());
+		$this->accordion->add_section(new SectionMagerung());
 		$this->accordion->add_section($section_surface);
 		$this->accordion->add_section($section_production);
 		$this->accordion->add_section($section_fracture);
@@ -89,6 +90,7 @@ class Form {
 		$this->accordion->add_section($sections_dimensions);
 		$this->accordion->add_section($section_functionals);
 		$this->accordion->add_section($section_usewear);
+		$this->accordion->add_section($section_primitive);
 		$this->accordion->add_section($section_condition);
 	}
 
@@ -125,7 +127,7 @@ class Form {
 	}
 
 	public function showDescription() {
-		return (bool)$this->getPost(Request::Submit);
+		return (bool)post(Request::Submit);
 	}
 
 	public function getSection($name, $page = false, $content = false) {
@@ -136,7 +138,7 @@ class Form {
 
 	public function getTextInput($key, $label = false, $format = false, $style = '') {
 		$label = $label ? $label : '';
-		$value = $this->getPost($key);
+		$value = post($key);
 		$value = $value ? $value : '';
 		$id = strtolower(str_replace(' ', '_', "text_{$key}"));
 		$style = $style ? ' style="'.$style.'"':'';
@@ -145,7 +147,7 @@ class Form {
 
 	public function getTextArea($key, $label = false) {
 		$label = $label ? $label : '';
-		$value = $this->getPost($key);
+		$value = post($key);
 		$value = $value ? $value : '';
 		$id = explode(' ', strtolower(str_replace(' ', '_', "textarea_{$key}")));
 		$id = $id[0];
@@ -153,7 +155,7 @@ class Form {
 	}
 
 	protected function addPost(&$array, $name) {
-		$value = $this->getPost($name);
+		$value = post($name);
 		if ($value) $array[] = $value;
 	}
 
@@ -282,13 +284,13 @@ class Form {
 	// -------------------------------------------------------------------------
 
 	public function getGrundformNummer() {
-		$grundform = $this->getPost(Id::Grundform);
+		$grundform = post(Id::Grundform);
 		$grundform = explode(' ', $grundform ? $grundform : '');
 		return (sizeof($grundform)) ? '('.$grundform[0].')' : 'ERROR';
 	}
 
 	public function getGrundformName() {
-		$grundform = $this->getPost(Id::Grundform);
+		$grundform = post(Id::Grundform);
 		$grundform = explode(' ', $grundform ? $grundform : '');
 		$name = array();
 		for ($i = 1; $i < sizeof($grundform); $i++)
@@ -305,10 +307,10 @@ class Form {
 
 		// Sonderfall: Keine Randform noch Randkontur gewählt, aber Formalbeschreibung,
 		// schließe Satz mit ".. Rand."
-		$shape    = post(SectionBorder::KEY_BORDER_SHAPE);
-		$contour  = post(SectionBorder::KEY_BORDER_CONTOUR);
-		$assembly = post(SectionBorder::KEY_BORDER_ASSEMBLY);
-		$formal   = post(SectionBorder::KEY_BORDER_FORMAL);
+		$shape    = SectionBorder::shape();
+		$contour  = SectionBorder::contour();
+		$assembly = SectionBorder::assembly();
+		$formal   = SectionBorder::formal();
 		if ((!$shape and !$contour) and ($assembly or $formal))
 			$list .= " Rand";
 
@@ -345,84 +347,44 @@ class Form {
 	}
 
 	public function getMagerungsart() {
-		$ending = (post(SectionBasics::KEY_CATEGORY) == 'Irdenware' ? 'e' : 'es');
-		$magerungsart = $this->getPost('magerungsart');
+		$ending = SectionGrundlagen::isIrdenware() ? 'e' : 'es';
+		$magerungsart = post('magerungsart');
 		return $magerungsart ? $magerungsart.$ending : '';
 	}
 
 	public function getMagerungstypen() {
-		$typen = $this->getPost('magerungstyp');
+		$typen = post('magerungstyp');
 		return implode(', ', is_array($typen) ? $typen : array());
 	}
 
 	public function getKorngroesseInline() {
-		$size = $this->getPost('korngroesse');
+		$size = post('korngroesse');
 		$size = str_replace('fein', 'feine', $size);
 		$size = str_replace('mittel', 'mittelgroße', $size);
 		$size = str_replace('grob', 'grobe', $size);
 		return $size;
 	}
 
-	public function getScherbenfarbeLong() {
-		$farbe = array();
-
-		$aussen = $this->getColors('farbe_aussen', 'farbe_aussen_2');
-		$farbverteilung1 = $this->getPost('farbverteilung_aussen');
-		if ($aussen and $farbverteilung1) $aussen .= ", {$farbverteilung1}";
-		if ($aussen) $farbe[] = "Oberfläche außen: {$aussen}";
-
-		$bruch = $this->getColors('farbe_bruch', 'farbe_bruch_2');
-		$farbverteilung2 = $this->getPost('farbverteilung_bruch');
-		if ($bruch and $farbverteilung2) $bruch .= ", {$farbverteilung2}";
-		if ($bruch) $farbe[] = "Bruch: {$bruch}";
-
-		$innen = $this->getColors('farbe_innen', 'farbe_innen_2');
-		$farbverteilung3 = $this->getPost('farbverteilung_innen');
-		if ($innen and $farbverteilung3) $innen .= ", {$farbverteilung3}";
-		if ($innen) $farbe[] = "Oberfläche innen: {$innen}";
-		$farbe = implode('; ', $farbe);
-		$paragraph = $this->getPost('fragment') == 'vollständig erh.' ? 'Farbe' : 'Scherbenfarbe';
-		return $farbe ? "<strong>{$paragraph}:</strong> {$farbe}.<br>".PHP_EOL : '';
-	}
-
-	public function getScherbenfarbeShort() {
-		$farbe = array();
-		$aussen = $this->getCleanColor('farbe_aussen', $foo, $bar);
-		$aussen2 = $this->getCleanColor('farbe_aussen_2', $foo, $bar);
-		if ($aussen and $aussen2) $aussen .= " bis {$aussen2}";
-		if ($aussen) $farbe[] = "außen: {$aussen}";
-		$bruch = $this->getCleanColor('farbe_bruch', $foo, $bar);
-		$bruch2 = $this->getCleanColor('farbe_bruch_2', $foo, $bar);
-		if ($bruch and $bruch2) $bruch .= " bis {$bruch2}";
-		if ($bruch) $farbe[] = "Bruch: {$bruch}";
-		$innen = $this->getCleanColor('farbe_innen', $foo, $bar);
-		$innen2 = $this->getCleanColor('farbe_innen_2', $foo, $bar);
-		if ($innen and $innen2) $innen .= " bis {$innen2}";
-		if ($innen) $farbe[] = "innen: {$innen}";
-		$farbe = implode(', ', $farbe);
-		return $farbe ? "({$farbe})" : '';
-	}
-
 	public function getMagerungLong() {
 		$magerung1 = array();
-		$temp = $this->getPost('magerungsmenge');
+		$temp = post('magerungsmenge');
 		if ($temp) $magerung1[] = "{$temp} Magerungsanteile";
-		$temp = $this->getPost('korngroesse');
+		$temp = post('korngroesse');
 		if ($temp) $magerung1[] = "Korngröße {$temp}";
-		$temp = $this->getPost('magerungssortierung');
+		$temp = post('magerungssortierung');
 		if ($temp) $magerung1[-1] = " ({$temp})";
-		$temp = $this->getPost('magerungsform');
-		if ($temp) $magerung1[] = ($this->getPost('magerungsform_vorwiegend')? 'vorwiegend ' : '')."{$temp}";
-		$temp = $this->getPost('magerungsverteilung');
+		$temp = post('magerungsform');
+		if ($temp) $magerung1[] = (post('magerungsform_vorwiegend')? 'vorwiegend ' : '')."{$temp}";
+		$temp = post('magerungsverteilung');
 		if($temp) $magerung1[] = $temp;
-		$temp = $this->getPost('magerungsverteilung_anmerkung');
-		if ($this->getPost('magerungsverteilung') and $temp) $magerung1[-1] = " ({$temp})";
+		$temp = post('magerungsverteilung_anmerkung');
+		if (post('magerungsverteilung') and $temp) $magerung1[-1] = " ({$temp})";
 
 		$magerung2 = array();
 		$temp = $this->replaceLastOccurence(', ', ' und ', $this->getMagerungstypen());
 		if ($temp) $magerung2[] = $temp;
-		$temp = $this->getPost('magerungstyp_anmerkung');
-		if ($this->getPost('magerungstyp') and $temp) $magerung2[] = $temp;
+		$temp = post('magerungstyp_anmerkung');
+		if (post('magerungstyp') and $temp) $magerung2[] = $temp;
 		$magerung = implode(', ', $magerung1);
 		$magerung .= (sizeof($magerung2)) ? ($magerung ? "; " : '').implode(', ', $magerung2) : '';
 		$magerung = ucfirst($magerung);
@@ -432,13 +394,13 @@ class Form {
 
 	public function getOberflaecheLong() {
 		$list = array();
-		$oberflaeche = $this->getPost('oberflaechenstruktur');
+		$oberflaeche = post('oberflaechenstruktur');
 		$oberflaeche = implode(', ', $oberflaeche ? $oberflaeche : array());
 		if ($oberflaeche) $list[] = $oberflaeche;
-		$temp = $this->getPost('oberflaechenstruktur_anmerkung');
+		$temp = post('oberflaechenstruktur_anmerkung');
 		if ($temp) $list[] = $temp;
 		$oberflaeche = implode(', ', $list);
-		if ($this->getPost('oberflaechenstruktur_overwrite'))
+		if (post('oberflaechenstruktur_overwrite'))
 			$oberflaeche = $temp;
 		$oberflaeche = SectionSurface::get_long_description();
 		return $oberflaeche ? "<strong>Oberfläche:</strong> $oberflaeche.<br>".PHP_EOL : '';
@@ -450,7 +412,7 @@ class Form {
 	}
 
 	public function getScherbenhaerteLong() {
-		$hardness = SectionSurface::hardness();
+		$hardness = SectionSurface::scherbenhaerte();
 		return $hardness ? "<strong>Scherbenhärte:</strong> $hardness.<br>".PHP_EOL : '';
 	}
 
@@ -464,7 +426,7 @@ class Form {
 	}
 
 	public function getLongDescription() {
-		$unsicher = $this->getPost('grundform_unsicher');
+		$unsicher = post('grundform_unsicher');
 		$unsicher = $unsicher ? ' (?)' : '';
 		$html = '<strong>Form:</strong> '.
 			$this->getGrundformName()."{$unsicher} ".
@@ -482,16 +444,16 @@ class Form {
 		if ($forming) $list[] = "{$forming}e";
 
 		$primary_burning = SectionProduction::primary_burning();
-		$ending = (post(SectionBasics::KEY_CATEGORY) == 'Irdenware' ? 'e' : 'es');
+		$ending = SectionGrundlagen::isIrdenware() ? 'e' : 'es';
 		if ($primary_burning) $list[] = "{$primary_burning}{$ending}";
 		$list = implode(', ', array_filter($list));
-		$html .= ucfirst((($list) ? "$list " : '').post(SectionBasics::KEY_CATEGORY));
+		$html .= ucfirst((($list) ? "$list " : '').SectionGrundlagen::keramikgattung());
 		$html .= '.<br>';
 
 		$html .= $this->getHerstellungsspurenLong();
 		$html .= $this->getFunktionselementeLong();
 		$html .= $this->getSekundaereVeraenderungenLong();
-		$html .= $this->getScherbenfarbeLong();
+		$html .= SectionProduction::get_long_colors();
 		$html .= $this->getMagerungLong();
 		$html .= $this->getOberflaecheLong();
 		$html .= $this->getBruchstrukturLong();
@@ -503,7 +465,7 @@ class Form {
 	public function getShortDescription() {
 		$html = array();
 
-		$unsicher = $this->getPost('grundform_unsicher');
+		$unsicher = post('grundform_unsicher');
 		$unsicher = $unsicher ? ' (?)' : '';
 		$html[] = $this->getGrundformName()."{$unsicher} ".$this->getGrundformNummer().SectionCondition::get_short_description();
 
@@ -518,15 +480,15 @@ class Form {
 		$list = array();
 		$list[] = $this->getMagerungsart();
 
-		$primaerbrand = $this->getPost('primaerbrand');
-		$ending = (post(SectionBasics::KEY_CATEGORY) == 'Irdenware' ? 'e' : 'es');
+		$primaerbrand = post('primaerbrand');
+		$ending = SectionGrundlagen::isIrdenware() ? 'e' : 'es';
 		if ($primaerbrand) $list[] = "{$primaerbrand}{$ending}";
 		$list = implode(', ', $list);
-		$magerung = (($list) ? "$list " : '').post(SectionBasics::KEY_CATEGORY);
-		$farbe = $this->getScherbenfarbeShort();
+		$magerung = (($list) ? "$list " : '').SectionGrundlagen::keramikgattung();
+		$farbe = SectionProduction::get_short_colors();
 		if ($farbe) $magerung .= " $farbe";
 		$magerung2 = array();
-		$temp = $this->getPost('magerungsmenge');
+		$temp = post('magerungsmenge');
 		if ($temp) $magerung2[] = $temp;
 		$temp = $this->getKorngroesseInline();
 		if ($temp) $magerung2[] = $temp;
@@ -561,24 +523,24 @@ class Form {
 		return '';
 	}
 
-	public function getSectionGrundlagen()
-	{
-		$input = new Choice(SectionBasics::KEY_CATEGORY, false);
-		$input->addChoice('Irdenware', false, true);
-		$input->addChoice('Fayence');
-		$input->addChoice('Steingut');
-		$input->addChoice('Steinzeug');
-		$input->addChoice('Porzellan');
-
-		$table = get_table(
-			array(
-				array('<h4>Keramikgattung</h4>'),
-				array($input->getHtml()),
-			)
-		);
-
-		return $this->getSection('Grundlagen', 10, $table);
-	}
+// 	public function getSectionGrundlagen()
+// 	{
+// 		$input = new Choice(SectionGrundlagen::KEY_CATEGORY, false);
+// 		$input->addChoice('Irdenware', false, true);
+// 		$input->addChoice('Fayence');
+// 		$input->addChoice('Steingut');
+// 		$input->addChoice('Steinzeug');
+// 		$input->addChoice('Porzellan');
+//
+// 		$table = get_table(
+// 			array(
+// 				array('<h4>Keramikgattung</h4>'),
+// 				array($input->getHtml()),
+// 			)
+// 		);
+//
+// 		return $this->getSection('Grundlagen', 10, $table);
+// 	}
 
 	public function getSectionMagerung()
 	{
@@ -658,7 +620,7 @@ class Form {
 	public function run() {
 		$url = $this->getUrl();
 
-// 		if ($this->getPost('accordion_active')) {
+// 		if (post('accordion_active')) {
 
 
 		echo $this->getGenerateDescription();
@@ -693,8 +655,8 @@ class Form {
 
 		$html .= '<div id="accordion">'.PHP_EOL;
 
-		$html .= $this->getSectionGrundlagen();
-		$html .= $this->getSectionMagerung();
+// 		$html .= $this->getSectionGrundlagen();
+// 		$html .= $this->getSectionMagerung();
 
 
 // 		$html .= $this->getSection('Oberfläche', 15);
@@ -1279,7 +1241,7 @@ class Form {
 // 		$input->addChoice('Bodenfragment');
 // 		$input = $input->getHtml().$this->getTextInput('condition_fragments_count', '<h4>Anzahl der Fragmente (optional)</h4>').' Stück';
 // 		$html .= $this->getBox('Fragmentierung', $input);
-// // 		print $this->getPost('condition_fragmentation');
+// // 		print post('condition_fragmentation');
 // 		$image = array(
 // 			0 => 'not_specified',
 // 			'vollständig erh.' => 'complete_extent',
@@ -1290,7 +1252,7 @@ class Form {
 // 			'Wand-/Bodenfragment' => 'wall_bottom',
 // 			'Bodenfragment' => 'bottom',
 // 		);
-// 		$html .= '<div><img id="condition_figure" src="images/condition_'.$image[$this->getPost('condition_fragmentation')].'.png"></div>';
+// 		$html .= '<div><img id="condition_figure" src="images/condition_'.$image[post('condition_fragmentation')].'.png"></div>';
 //
 // 		// Restauration.
 // 		$input = new MultiChoice('condition_restoration');

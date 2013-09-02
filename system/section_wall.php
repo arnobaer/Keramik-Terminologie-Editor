@@ -57,33 +57,33 @@ class SectionWall extends AccordionSection
 	/** Specify the vessel neck type. */
 	public function show_neck()
 	{
-		$input = new Choice(self::KEY_WALL_NECK, false);
+		$input = new ChoiceWidget(self::KEY_WALL_NECK, false);
 		$input->addChoice(self::VAL_NOT_SPECIFIED, "keine Angabe");
 		$input->addChoice("stark einziehender Hals");
 		$input->addChoice("schwach einziehender Hals");
 		$input->addChoice("zylindrischer Hals");
 		$input->addChoice("konischer Hals");
 
-		$box = new Box('hals', "Hals/Halszone", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('hals', "Hals/Halszone", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Specify the vessel shoulder type. */
 	public function show_shoulder()
 	{
-		$input = new Choice(self::KEY_WALL_SHOULDER, false);
+		$input = new ChoiceWidget(self::KEY_WALL_SHOULDER, false);
 		$input->addChoice(0, "keine Angabe");
 		$input->addChoice("flach ansteigende Schulter");
 		$input->addChoice("steil ansteigende Schulter");
 
-		$box = new Box('schulter', "Schulter/Schulterzone", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('schulter', "Schulter/Schulterzone", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Specify the vessel bulge type. */
 	public function show_bulge()
 	{
-		$input = new Choice(self::KEY_WALL_BULGE, false);
+		$input = new ChoiceWidget(self::KEY_WALL_BULGE, false);
 		$input->addChoice(0, "keine Angabe");
 		$input->addChoice("zylindrischer Bauch");
 		$input->addChoice("ellipsoider Bauch");
@@ -91,20 +91,20 @@ class SectionWall extends AccordionSection
 		$input->addChoice("konischer Bauch");
 		$input->addChoice("quaderförmiger Bauch");
 
-		$box = new Box('bauch', "Bauch/Bauchzone", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('bauch', "Bauch/Bauchzone", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Specify the vessel foot type. */
 	public function show_foot()
 	{
-		$input = new Choice(self::KEY_WALL_FOOT);
+		$input = new ChoiceWidget(self::KEY_WALL_FOOT);
 		$input->addChoice("einziehender Fuß");
 		$input->addChoice("ausladende Fußzone");
 		$input->addChoice("zylindrische Fußzone");
 
-		$box = new Box('fuss', "Fuß/Fußzone", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('fuss', "Fuß/Fußzone", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */

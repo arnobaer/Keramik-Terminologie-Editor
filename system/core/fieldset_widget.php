@@ -19,15 +19,10 @@
  *
  */
 
-/** Implements a simple content box with title.
-
-How to use:
-
-$box = new Box('my_box', "A simple box", "Lorem ipsum et dolor.");
-$box->show();
+/** Implements a simple fieldset with title.
 
 */
-class Box
+class FieldsetWidget
 {
 	/** Constructor. */
 	public function __construct($id, $title, $content)
@@ -35,24 +30,11 @@ class Box
 		$this->id = $id;
 		$this->title = $title;
 		$this->content = $content;
-		$this->float = false; // if true float boxes to the left.
-	}
-
-	public function floatLeft()
-	{
-		$this->float = true;
 	}
 
 	/** Print section to stdout. */
 	public function show()
 	{
-		$style = '';
-		if ($this->float) $style = 'float:left; padding-right:25px;';
-		echo "\t<fieldset id=\"{$this->id}_box\" style=\"$style\">".PHP_EOL;
-		echo "\t\t<legend id=\"{$this->id}_box_title\">{$this->title}</legend>".PHP_EOL;
-// 		echo "\t\t<div style=\"float:left;\" id=\"{$this->id}_box_content\">".PHP_EOL;
-		echo "\t\t\t{$this->content}".PHP_EOL;
-// 		echo "\t\t</div>".PHP_EOL;
-		echo "\t</fieldset>".PHP_EOL;
+		include VIEW_PATH.'/fieldset_widget.php';
 	}
 }

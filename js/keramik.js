@@ -34,8 +34,8 @@ $(function() {
 		}
 	});
 
-
 	$( "#radioset" ).buttonset();
+
 	$( "#submit_button" ).button({
 		icons: {
 			primary: "ui-icon-arrowrefresh-1-s"
@@ -50,32 +50,11 @@ $(function() {
 
 	$( "#grundform_tabs" ).tabs();
 
-
-
-	$( "#dialog" ).dialog({
-		autoOpen: false,
-		width: 400,
-		buttons: [
-			{
-				text: "Ok",
-				click: function() {
-					$( this ).dialog( "close" );
-				}
-			},
-			{
-				text: "Cancel",
-				click: function() {
-					$( this ).dialog( "close" );
-				}
-			}
-		]
-	});
-
-	var Gebrauchsspuren = [
+	var List_UseWear = [
 		"Abreibespuren", "Schmauchspuren", "Reparaturen"
 	];
 
-	var Muendung = [
+	var List_BorderSpout = [
 		"runde", "ovale", "kleeblattförmige", "dreipassförmige", "vierpassförmige", "dreieckige", "viereckige", "polygonale"
 	];
 
@@ -85,7 +64,9 @@ $(function() {
 	function extractLast( term ) {
 		return split( term ).pop();
 	}
-	$( "#textarea_gebrauchsspuren" )
+
+	/* Multi word auto complete for use-wear section. */
+	$( "#text_usewear_usewear" )
 		// don't navigate away from the field on tab when selecting an item
 		.bind( "keydown", function( event ) {
 			if ( event.keyCode === $.ui.keyCode.TAB &&
@@ -98,7 +79,7 @@ $(function() {
 		source: function( request, response ) {
 			// delegate back to autocomplete, but extract the last term
 			response( $.ui.autocomplete.filter(
-				Gebrauchsspuren, extractLast( request.term ) ) );
+				List_UseWear, extractLast( request.term ) ) );
 		},
 		focus: function() {
 			// prevent value inserted on focus
@@ -117,7 +98,8 @@ $(function() {
 		}
 	});
 
-	$( "#text_rand_muendung" ).autocomplete({
-		source: Muendung
+	/* Single word auto complete for border section. */
+	$( "#text_border_spout" ).autocomplete({
+		source: List_BorderSpout
 	});
 });

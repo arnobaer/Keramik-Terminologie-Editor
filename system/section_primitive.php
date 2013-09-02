@@ -19,62 +19,52 @@
  *
  */
 
-/** Object condition section.
+/** Object primitive form section.
 */
-class SectionBottom extends AccordionSection
+class SectionPrimitive extends AccordionSection
 {
 	// Used POST variable names.
 
-	const KEY_BOTTOM    = 'KEY_BOTTOM';
+	const ID_         = 'primitive_';
 
 	// Used variable values to be compared somewhere.
 
-	const VAL_NOT_SPECIFIED = 0;
+	const VALUE_NOT_SPECIFIED = 0;
 
 	public function __construct()
 	{
 		parent::__construct(
-			'bottomzone',   // Element id
-			"Bodenbereich", // Section title
-			34              // Page number
+			'primitive_form', // Element id
+			"Grundform",      // Section title
+			58                // Page number
 		);
 	}
 
 	public function show_content()
 	{
 ?>
-		<table style="width:auto;">
+		<table>
 			<tr>
-				<td><?php $this->show_bottom(); ?></td>
+				<td></td>
 			</tr>
 		</table>
 <?php
 	}
 
-	/** Specify the vessel bottom type. */
-	public function show_bottom()
+	/**
+	 * @returns
+	 */
+	public function fieldset_()
 	{
-		$input = new ChoiceWidget(self::KEY_BOTTOM);
-		$input->addChoice("Flachboden");
-		$input->addChoice("minimal nach oben gewölbter Flachboden", "Flachboden, min. n. oben gewölbt");
-		$input->addChoice("Konvexboden");
-		$input->addChoice("Konkavboden");
-		$input->addChoice("aus der Masse gedrehter Standring");
 
-		$fieldset = new FieldsetWidget('bottom', "Bodenformen", $input->getHtml());
+		$fieldset = new FieldsetWidget('production_forming', "Formgebung", $forming->getHtml());
 		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */
 	static public function get_long_description()
 	{
-		$list = array();
-
-		$list[] = post(self::KEY_BOTTOM);
-
-		$list = array_filter($list);
-
-		return implode(", ", $list);
+		return '';
 	}
 
 	/** Returns short formal description. */

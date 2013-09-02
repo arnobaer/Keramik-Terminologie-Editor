@@ -23,11 +23,14 @@
 */
 class SectionSurface extends AccordionSection
 {
+	const Title = "Oberfläche";
+	const PageNumber = 15;
+
 	// Used POST variable names.
 
-	const ID_TEXTURE            = 'surface_texture';
-	const ID_TEXTURE_ANNOTATION = 'surface_annotation';
-	const ID_HARDNESS           = 'surface_hardness';
+	const IdStruktur          = 'oberflaeche_struktur';
+	const IdStrukturAnmerkung = 'oberflaeche_anmerkung';
+	const IdScherbenhaerte    = 'oberflaeche_scherbenhaerte';
 
 	// Used variable values to be compared somewhere.
 
@@ -35,26 +38,22 @@ class SectionSurface extends AccordionSection
 
 	public function __construct()
 	{
-		parent::__construct(
-			'surface',    // Element id
-			"Oberfläche", // Section title
-			15            // Page number
-		);
+		parent::__construct('oberflaeche', self::Title, self::PageNumber);
 	}
 
-	static public function texture()
+	static public function struktur()
 	{
-		return post(self::ID_TEXTURE);
+		return post(self::IdStruktur);
 	}
 
-	static public function texture_annotation()
+	static public function strukturAnmerkung()
 	{
-		return post(self::ID_TEXTURE_ANNOTATION);
+		return post(self::IdStrukturAnmerkung);
 	}
 
-	static public function hardness()
+	static public function scherbenhaerte()
 	{
-		return post(self::ID_HARDNESS);
+		return post(self::IdScherbenhaerte);
 	}
 
 	public function show_content()
@@ -63,7 +62,7 @@ class SectionSurface extends AccordionSection
 		<table>
 			<tr>
 				<td><?php $this->fieldset_texture(); ?></td>
-				<td><?php $this->fieldset_hardness(); ?></td>
+				<td><?php $this->fieldset_scherbenhaerte(); ?></td>
 			</tr>
 			<tr>
 				<td><?php $this->fieldset_texture_annotation(); ?></td>
@@ -77,8 +76,7 @@ class SectionSurface extends AccordionSection
 	 */
 	public function fieldset_texture()
 	{
-		$texture = new MultiChoice(self::ID_TEXTURE, false);
-		$texture->addChoice(self::VALUE_NOT_SPECIFIED, 'glatt (haptisch)');
+		$texture = new MultiChoiceWidget(self::IdStruktur);
 		$texture->addChoice('glatt', 'glatt (haptisch)');
 		$texture->addChoice('körnig', 'körnig (haptisch)');
 		$texture->addChoice('kreidig', 'kreidig (haptisch)');
@@ -88,10 +86,10 @@ class SectionSurface extends AccordionSection
 		$texture->addChoice('löchrig', 'löchrig (optisch)');
 		$texture->addChoice('rissig', 'rissig/schrundig (optisch)');
 
-		$annotation = new TextInput(self::ID_TEXTURE_ANNOTATION, "Anmerkung (optional)");
+		$annotation = new TextInputWidget(self::IdStrukturAnmerkung, "Anmerkung (optional)");
 
-		$box = new Box('surface_texture', "Oberflächenstruktur", $texture->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('surface_texture', "Oberflächenstruktur", $texture->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -99,25 +97,25 @@ class SectionSurface extends AccordionSection
 	 */
 	public function fieldset_texture_annotation()
 	{
-		$annotation = new TextInput(self::ID_TEXTURE_ANNOTATION, "Anmerkung  zur Oberflächenstruktur (optional)");
+		$annotation = new TextInputWidget(self::IdStrukturAnmerkung, "Anmerkung  zur Oberflächenstruktur (optional)");
 
-		$box = new Box('surface_texture_annotation', "Anmerkung (optional)", $annotation->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('surface_texture_annotation', "Anmerkung (optional)", $annotation->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
 	 * @returns field set for surface shard hardness.
 	 */
-	public function fieldset_hardness()
+	public function fieldset_scherbenhaerte()
 	{
-		$hardness = new Choice(self::ID_HARDNESS);
+		$hardness = new ChoiceWidget(self::IdScherbenhaerte);
 		$hardness->addChoice('weich');
 		$hardness->addChoice('hart');
 		$hardness->addChoice('sehr hart');
 		$hardness->addChoice('klingend hart');
 
-		$box = new Box('surface_hardness', "Scherbenhärte", $hardness->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('surface_hardness', "Scherbenhärte", $hardness->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */
@@ -125,10 +123,10 @@ class SectionSurface extends AccordionSection
 	{
 		$surface = array();
 
-		$texture = self::texture();
+		$texture = self::struktur();
 
 		$surface[] = implode(', ', $texture ? $texture : array());
-		$surface[] = self::texture_annotation();
+		$surface[] = self::strukturAnmerkung();
 
 		$surface = implode(', ', array_filter($surface));
 
@@ -140,6 +138,7 @@ class SectionSurface extends AccordionSection
 	/** Returns short formal description. */
 	static public function get_short_description()
 	{
-		return lcfirst(self::hardness()." gebrannt");
+		$hardness = self::scherbenhaerte();
+		return lcfirst(($hardness ? "{$hardness} " : '') . "gebrannt");
 	}
 }

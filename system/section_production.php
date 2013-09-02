@@ -19,64 +19,6 @@
  *
  */
 
-/*
-		$farbe_aussen_value = $this->getCleanColor('farbe_aussen', $farbe_aussen_valid, $farbe_aussen_munsell);
-		$farbe_aussen_value_2 = $this->getCleanColor('farbe_aussen_2', $farbe_aussen_valid_2, $farbe_aussen_munsell_2);
-		$farbe_bruch_value = $this->getCleanColor('farbe_bruch', $farbe_bruch_valid, $farbe_bruch_munsell);
-		$farbe_bruch_value_2 = $this->getCleanColor('farbe_bruch_2', $farbe_bruch_valid_2, $farbe_bruch_munsell_2);
-		$farbe_innen_value = $this->getCleanColor('farbe_innen', $farbe_innen_valid, $farbe_innen_munsell);
-		$farbe_innen_value_2 = $this->getCleanColor('farbe_innen_2', $farbe_innen_valid_2, $farbe_innen_munsell_2);
-
-		$html .= '<div class="sixteen columns">'.PHP_EOL;
-		$html .= '<h4>Brand: Farbe</h4>'.PHP_EOL;
-		$html .= '<p>Farbangaben nach Oyama und Takehara 1996 (Munsell), RAL oder Farbnamen. <strong>Don\'t care!</strong> Experimentelle automatische Formatierung.</p>'.PHP_EOL;
-
-
-		$html .= '<div class="five columns alpha"><h5>Oberfläche außen</h5><p>'.PHP_EOL;
-		$html .= '<input style="'.($farbe_aussen_valid?'':'color:red;').'" type="text" name="farbe_aussen" value="'.$farbe_aussen_value.'">';
-		$html .= 'bis';
-		$html .= '<input style="'.($farbe_aussen_valid_2?'':'color:red;').'" type="text" name="farbe_aussen_2" value="'.$farbe_aussen_value_2.'">';
-		$html .= '</p><h5>Farbverteilung</h5><p>';
-		$input = new Choice('farbverteilung_aussen');
-		$input->addChoice('gleichmäßig');
-		$input->addChoice('ungleichmäßig');
-		$input->addChoice('scharf begrenzte Farbzonen');
-		$input->addChoice('ineinander übergehende Farbzohnen');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-
-
-		$html .= '<div class="five columns alpha"><h5>Bruch</h5><p>'.PHP_EOL;
-		$html .= '<input style="'.($farbe_bruch_valid?'':'color:red;').'" type="text" name="farbe_bruch" value="'.$farbe_bruch_value.'">';
-		$html .= 'bis';
-		$html .= '<input style="'.($farbe_bruch_valid_2?'':'color:red;').'" type="text" name="farbe_bruch_2" value="'.$farbe_bruch_value_2.'">';
-		$html .= '</p><h5>Farbverteilung</h5><p>';
-		$input = new Choice('farbverteilung_bruch');
-		$input->addChoice('gleichmäßig');
-		$input->addChoice('ungleichmäßig');
-		$input->addChoice('scharf begrenzte Farbzonen');
-		$input->addChoice('ineinander übergehende Farbzohnen');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-
-
-		$html .= '<div class="six columns omega"><h5>Oberfläche innen</h5><p>'.PHP_EOL;
-		$html .= '<input style="'.($farbe_innen_valid?'':'color:red;').'" type="text" name="farbe_innen" value="'.$farbe_innen_value.'">';
-		$html .= 'bis';
-		$html .= '<input style="'.($farbe_innen_valid_2?'':'color:red;').'" type="text" name="farbe_innen_2" value="'.$farbe_innen_value_2.'">';
-		$html .= '</p><h5>Farbverteilung</h5><p>';
-		$input = new Choice('farbverteilung_innen');
-		$input->addChoice('gleichmäßig');
-		$input->addChoice('ungleichmäßig');
-		$input->addChoice('scharf begrenzte Farbzonen');
-		$input->addChoice('ineinander übergehende Farbzohnen');
-		$html .= $input->getHtml();
-		$html .= '</p></div>'.PHP_EOL;
-		$html .= '</div>'.PHP_EOL
-
-		$html .= '</div>'.PHP_EOL;
-*/
-
 /** Object production section.
 */
 class SectionProduction extends AccordionSection
@@ -196,16 +138,20 @@ class SectionProduction extends AccordionSection
 ?>
 		<table>
 			<tr>
-				<td><?php $this->fieldset_forming(); ?></td>
+				<td colspan="2"><?php $this->fieldset_forming(); ?></td>
 				<td><?php $this->fieldset_primary_burning(); ?></td>
+				<td></td>
 			</tr>
 			<tr>
-				<td><?php $this->fieldset_color_outside(); ?></td>
-				<td><?php $this->fieldset_color_fracture(); ?></td>
-				<td><?php $this->fieldset_color_inside(); ?></td>
+				<td style="width:33%"><?php $this->fieldset_color_outside(); ?></td>
+				<td style="width:33%"><?php $this->fieldset_color_fracture(); ?></td>
+				<td style="width:33%"><?php $this->fieldset_color_inside(); ?></td>
 			</tr>
 			<tr>
-				<td><?php $this->fieldset_marks_soft(); ?></td>
+				<td colspan="3"><p style="margin-top:0;padding:top:0;" class="infobox"><strong>Hinweis:</strong> Farbangaben nach Oyama und Takehara 1996 (Munsell), RAL oder Farbnamen.</p></td>
+			</tr>
+			<tr>
+				<td rowspan="2"><?php $this->fieldset_marks_soft(); ?></td>
 				<td><?php $this->fieldset_marks_semihard(); ?></td>
 				<td><?php $this->fieldset_marks_burning(); ?></td>
 			</tr>
@@ -221,15 +167,14 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_forming()
 	{
-		$forming = new Choice(self::ID_FORMING, false);
-		$forming->addChoice(self::VALUE_NOT_SPECIFIED, "keine Angabe");
+		$forming = new ChoiceWidget(self::ID_FORMING);
 		$forming->addChoice('frei geformt', 'frei/ohne Verwendung einer Drehilfe geformt');
 		$forming->addChoice('drehend geformt', 'langsam gedreht/drehend geformt');
 		$forming->addChoice('drehend hochgezogen', 'schnell gedreht/drehend hochgezogen');
 		$forming->addChoice('mit Formhilfe geformt');
 
-		$box = new Box('production_forming', "Formgebung", $forming->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('production_forming', "Formgebung", $forming->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -237,7 +182,7 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_primary_burning()
 	{
-		$primary = new Choice(self::ID_PRIMARY_BURNING, false);
+		$primary = new ChoiceWidget(self::ID_PRIMARY_BURNING, false);
 		$primary->addChoice(self::VALUE_NOT_SPECIFIED, "keine Angabe");
 		$primary->addChoice('oxidierend gebrannt', 'Oxidationsbrand (rot/braun/gelblich)');
 		$primary->addChoice('reduzierend gebrannt', 'Reduktionsbrand (grau/schwarz)');
@@ -245,8 +190,8 @@ class SectionProduction extends AccordionSection
 		$primary->addChoice('reduzierend mit Oxidationskern gebrannt', 'Reduktionsbrand mit Oxidationskern');
 		$primary->addChoice('mischbrandig', 'Mischbrand');
 
-		$box = new Box('production_primary_burning', "Primärbrand", $primary->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('production_primary_burning', "Primärbrand", $primary->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -254,10 +199,21 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_color_outside()
 	{
-		$primary = new Choice(self::ID_PRIMARY_BURNING, false);
+		$color_a = str_clean_color(self::ID_COLOR_OUTSIDE_A, $color_a_valid, $color_a_is_munsell);
+		$color_b = str_clean_color(self::ID_COLOR_OUTSIDE_B, $color_b_valid, $color_b_is_munsell);
 
-		$box = new Box('production_color_outside', "Oberfläche außen", $primary->getHtml());
-		echo $box->show();
+		$colors  = 'Farbe <input style="'.($color_a_valid?'':'color:red;').'" type="text" name="'.self::ID_COLOR_OUTSIDE_A.'" value="'.$color_a.'">';
+		$colors .= ' bis ';
+		$colors .= '<input style="'.($color_b_valid?'':'color:red;').'" type="text" name="'.self::ID_COLOR_OUTSIDE_B.'" value="'.$color_b.'">';
+
+		$dist = new ChoiceWidget(self::ID_COLOR_OUTSIDE_DIST);
+		$dist->addChoice('gleichmäßig');
+		$dist->addChoice('ungleichmäßig');
+		$dist->addChoice('scharf begrenzte Farbzonen');
+		$dist->addChoice('ineinander übergehende Farbzohnen');
+
+		$fieldset = new FieldsetWidget('production_color_outside', "Oberfläche außen", $colors.$dist->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -265,10 +221,21 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_color_fracture()
 	{
-		$primary = new Choice(self::ID_PRIMARY_BURNING, false);
+		$color_a = str_clean_color(self::ID_COLOR_FRACTURE_A, $color_a_valid, $color_a_is_munsell);
+		$color_b = str_clean_color(self::ID_COLOR_FRACTURE_B, $color_b_valid, $color_b_is_munsell);
 
-		$box = new Box('production_color_fracture', "Bruch", $primary->getHtml());
-		echo $box->show();
+		$colors  = 'Farbe <input style="'.($color_a_valid?'':'color:red;').'" type="text" name="'.self::ID_COLOR_FRACTURE_A.'" value="'.$color_a.'">';
+		$colors .= ' bis ';
+		$colors .= '<input style="'.($color_b_valid?'':'color:red;').'" type="text" name="'.self::ID_COLOR_FRACTURE_B.'" value="'.$color_b.'">';
+
+		$dist = new ChoiceWidget(self::ID_COLOR_FRACTURE_DIST);
+		$dist->addChoice('gleichmäßig');
+		$dist->addChoice('ungleichmäßig');
+		$dist->addChoice('scharf begrenzte Farbzonen');
+		$dist->addChoice('ineinander übergehende Farbzohnen');
+
+		$fieldset = new FieldsetWidget('production_color_fracture', "Bruch", $colors.$dist->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -276,10 +243,21 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_color_inside()
 	{
-		$primary = new Choice(self::ID_PRIMARY_BURNING, false);
+		$color_a = str_clean_color(self::ID_COLOR_INSIDE_A, $color_a_valid, $color_a_is_munsell);
+		$color_b = str_clean_color(self::ID_COLOR_INSIDE_B, $color_b_valid, $color_b_is_munsell);
 
-		$box = new Box('production_color_inside', "Oberfläche innen", $primary->getHtml());
-		echo $box->show();
+		$colors  = 'Farbe <input style="'.($color_a_valid?'':'color:red;').'" type="text" name="'.self::ID_COLOR_INSIDE_A.'" value="'.$color_a.'">';
+		$colors .= ' bis ';
+		$colors .= '<input style="'.($color_b_valid?'':'color:red;').'" type="text" name="'.self::ID_COLOR_INSIDE_B.'" value="'.$color_b.'">';
+
+		$dist = new ChoiceWidget(self::ID_COLOR_INSIDE_DIST);
+		$dist->addChoice('gleichmäßig');
+		$dist->addChoice('ungleichmäßig');
+		$dist->addChoice('scharf begrenzte Farbzonen');
+		$dist->addChoice('ineinander übergehende Farbzohnen');
+
+		$fieldset = new FieldsetWidget('production_color_inside', "Oberfläche innen", $colors.$dist->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -287,7 +265,7 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_marks_soft()
 	{
-		$marks = new MultiChoice(self::ID_MARKS_SOFT);
+		$marks = new MultiChoiceWidget(self::ID_MARKS_SOFT);
 		$marks->addChoice('Abhebespur');
 		$marks->addChoice('parallele Abschneidespuren', 'Abschneidespuren, paralell');
 		$marks->addChoice('radiale Abschneidespuren', 'Abschneidespuren, radial');
@@ -305,8 +283,8 @@ class SectionProduction extends AccordionSection
 		$marks->addChoice('Self-slip');
 		$marks->addChoice('Verstreichspur');
 
-		$box = new Box('production_marks_soft', "Herstellungsspuren am nicht ausgehärteten Ton", $marks->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('production_marks_soft', "Spuren am nicht ausgehärteten Ton", $marks->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -314,14 +292,14 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_marks_semihard()
 	{
-		$marks = new MultiChoice(self::ID_MARKS_SEMIHARD);
+		$marks = new MultiChoiceWidget(self::ID_MARKS_SEMIHARD);
 		$marks->addChoice('Abdrehspuren');
 		$marks->addChoice('Angarnierungsdruckspur');
 		$marks->addChoice('Nachdrehspuren');
 		$marks->addChoice('Trochnungseinschnitt', 'Trochnungseinschnitt/-stich');
 
-		$box = new Box('production_marks_semihard', "Herstellungsspuren am \"lederharten\" Ton", $marks->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('production_marks_semihard', "Spuren am \"lederharten\" Ton", $marks->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -329,7 +307,7 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_marks_burning()
 	{
-		$marks = new MultiChoice(self::ID_MARKS_BURNING);
+		$marks = new MultiChoiceWidget(self::ID_MARKS_BURNING);
 		$marks->addChoice('Brennhaut');
 		$marks->addChoice('Brennhilfeabriss');
 		$marks->addChoice('Brennriss');
@@ -339,8 +317,8 @@ class SectionProduction extends AccordionSection
 		$marks->addChoice('metallischer Anflug', 'Metallischer Anflug');
 		$marks->addChoice('Windflecken');
 
-		$box = new Box('production_marks_burning', "Brandbedingte Herstellungsspuren", $marks->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('production_marks_burning', "Brandbedingte Herstellungsspuren", $marks->getHtml());
+		echo $fieldset->show();
 	}
 
 	/**
@@ -348,10 +326,10 @@ class SectionProduction extends AccordionSection
 	 */
 	public function fieldset_secondary_changes()
 	{
-		$secondary = new TextArea(self::ID_SECONDARY_CHANGES, "<br/>Veränderungen wie Lochungen die nich im Zusammenahng mit der Herstellung stehen.");
+		$secondary = new TextAreaWidget(self::ID_SECONDARY_CHANGES, "<br/>Veränderungen wie Lochungen die nich im Zusammenahng mit der Herstellung stehen.");
 
-		$box = new Box('production_secondary_changes', "Sekundäre Veränderungen (optional)", $secondary->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('production_secondary_changes', "Sekundäre Veränderungen (optional)", $secondary->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */
@@ -376,5 +354,47 @@ class SectionProduction extends AccordionSection
 	static public function get_short_description()
 	{
 		return self::get_long_description();
+	}
+
+	static public function get_long_colors()
+	{
+		$color = array();
+
+		$outside = str_colors(self::ID_COLOR_OUTSIDE_A, self::ID_COLOR_OUTSIDE_B);
+		$dist1 = post(self::ID_COLOR_OUTSIDE_DIST);
+		if ($outside and $dist1) $outside .= ", {$dist1}";
+		if ($outside) $color[] = "Oberfläche außen: {$outside}";
+
+		$fracture = str_colors(self::ID_COLOR_FRACTURE_A, self::ID_COLOR_FRACTURE_B);
+		$dist2 = post(self::ID_COLOR_FRACTURE_DIST);
+		if ($fracture and $dist2) $fracture .= ", {$dist2}";
+		if ($fracture) $color[] = "Bruch: {$fracture}";
+
+		$inside = str_colors(self::ID_COLOR_INSIDE_A, self::ID_COLOR_INSIDE_B);
+		$dist3 = post(self::ID_COLOR_INSIDE_DIST);
+		if ($inside and $dist3) $inside .= ", {$dist3}";
+		if ($inside) $color[] = "Oberfläche innen: {$inside}";
+		$color = implode('; ', $color);
+		$paragraph = SectionCondition::is_complete_extent() ? 'Farbe' : 'Scherbenfarbe';
+		return $color ? "<strong>{$paragraph}:</strong> {$color}.<br>".PHP_EOL : '';
+	}
+
+	static public function get_short_colors()
+	{
+		$color = array();
+		$outside = str_clean_color(self::ID_COLOR_OUTSIDE_A, $foo, $bar);
+		$outside2 = str_clean_color(self::ID_COLOR_OUTSIDE_B, $foo, $bar);
+		if ($outside and $outside2) $outside .= " bis {$outside2}";
+		if ($outside) $color[] = "außen: {$outside}";
+		$fracture = str_clean_color(self::ID_COLOR_FRACTURE_A, $foo, $bar);
+		$fracture2 = str_clean_color(self::ID_COLOR_FRACTURE_B, $foo, $bar);
+		if ($fracture and $fracture2) $fracture .= " bis {$fracture2}";
+		if ($fracture) $color[] = "Bruch: {$fracture}";
+		$inside = str_clean_color(self::ID_COLOR_INSIDE_A, $foo, $bar);
+		$inside2 = str_clean_color(self::ID_COLOR_INSIDE_B, $foo, $bar);
+		if ($inside and $inside2) $inside .= " bis {$inside2}";
+		if ($inside) $color[] = "innen: {$inside}";
+		$color = implode(', ', $color);
+		return $color ? "({$color})" : '';
 	}
 }

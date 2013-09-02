@@ -19,18 +19,30 @@
  *
  */
 
-class Choice {
+class ChoiceWidget
+{
+	const ValueNotSpecified = 0;
 
 	private $_key;
 	private $_default;
 
 	/** @param onclick define javascript function to be called on click. */
-	public function __construct($key, $notSpecified = true) {
+	public function __construct($key, $notSpecified = true, $items = array()) {
 		$this->_key = $key;
 		$this->_buttons = array();
 		$this->_default = -1; // Array index of last default element.
+		// Add not specified label as first item if requested.
 		if ($notSpecified) {
-			$this->addChoice(false, 'keine Angabe', true);
+			$this->addChoice(self::ValueNotSpecified, "keine Angabe", true);
+		}
+		// Populate with items.
+		foreach ($items as $item) {
+			$value   = $item[0];
+			$label   = defined($item[1]) ? $item[1] : false;
+			$default = defined($item[2]) ? $item[2] : false;
+			$margin  = defined($item[3]) ? $item[3] : false;
+			$onclick = defined($item[4]) ? $item[4] : false;
+			$this->addChoice($value, $label, $default, $margin, $onclick);
 		}
 	}
 

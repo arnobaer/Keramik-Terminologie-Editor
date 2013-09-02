@@ -76,7 +76,7 @@ class SectionCondition extends AccordionSection
 	/** Specify the degree of possible fragmentation. */
 	protected function show_fragmentation()
 	{
-		$input = new Choice(self::KEY_FRAGMENTATION, false);
+		$input = new ChoiceWidget(self::KEY_FRAGMENTATION, false);
 		$input->addChoice(self::VAL_NOT_SPECIFIED, "keine Angabe", false, false, "condition_image('not_specified')");
 		$input->addChoice(self::VAL_COMPLETE_EXTENT, "vollständig erhalten", false, false, "condition_image('complete_extent')");
 		$input->addChoice(self::VAL_GENERAL_FRAGMENTS, "allg. Fragment(e)", false, false, "condition_image('general_fragments')");
@@ -102,29 +102,29 @@ class SectionCondition extends AccordionSection
 		$content .= '<div><img id="condition_figure" src="images/condition_'.$image[post(self::KEY_FRAGMENTATION)].'.png"></div>';
 		$content .= '<div style="clear:left;"></div>';
 
-		$box = new Box('fragmentierung', "Fragmentierung", $content);
-		echo $box->show();
+		$fieldset = new FieldsetWidget('fragmentierung', "Fragmentierung", $content);
+		echo $fieldset->show();
 	}
 
 	/** Count of fragments. This parameter is optional. */
 	protected function show_fragments_count()
 	{
 
-		$input = new TextInput(self::KEY_FRAGMENTS_COUNT, "Stück", false, 3);
+		$input = new TextInputWidget(self::KEY_FRAGMENTS_COUNT, "Stück", false, 3);
 
-		$box = new Box(self::VAL_FRAGMENTS_COUNT, "Anzahl der Fragmente (optional)", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget(self::VAL_FRAGMENTS_COUNT, "Anzahl der Fragmente (optional)", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Was the object restored? For example where the parts glued together? */
 	protected function show_restoration()
 	{
-		$input = new MultiChoice(self::KEY_RESTORATION);
+		$input = new MultiChoiceWidget(self::KEY_RESTORATION);
 		$input->addChoice(self::VAL_RESTORATION_GLUED, "geklebt (z. B. <em>Archäocoll 2000</em> oder <em>Paraloid&trade; B 72</em>)");
 		$input->addChoice(self::VAL_RESTORATION_RECONSTRUCTED, "rekonstruiert (z. B. <em>Alabastergips</em>)");
 
-		$box = new Box('restauration', "Restauration", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('restauration', "Restauration", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** @returns type of fragmentation. */

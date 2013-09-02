@@ -24,19 +24,18 @@ const CTRL_PATH = 'system/controller';
 const CORE_PATH = 'system/core';
 const VIEW_PATH = 'system/views';
 
-require_once CORE_PATH . '/functions.php';
-
 require_once CORE_PATH . '/munsell.php';
-
-require_once SYS_PATH . '/box.php';
-require_once SYS_PATH . '/choice.php';
-require_once SYS_PATH . '/multi_choice.php';
-require_once SYS_PATH . '/text_input.php';
-require_once SYS_PATH . '/text_area.php';
+require_once CORE_PATH . '/functions.php';
+require_once CORE_PATH . '/fieldset_widget.php';
+require_once CORE_PATH . '/choice_widget.php';
+require_once CORE_PATH . '/multi_choice_widget.php';
+require_once CORE_PATH . '/text_input_widget.php';
+require_once CORE_PATH . '/text_area_widget.php';
 
 require_once SYS_PATH . '/accordion.php';
 require_once SYS_PATH . '/accordion_section.php';
-require_once SYS_PATH . '/section_basics.php';
+require_once CTRL_PATH . '/section_grundlagen.php';
+require_once CTRL_PATH . '/section_magerung.php';
 require_once SYS_PATH . '/section_surface.php';
 require_once SYS_PATH . '/section_production.php';
 require_once SYS_PATH . '/section_fracture.php';
@@ -46,5 +45,6 @@ require_once SYS_PATH . '/section_bottom.php';
 require_once SYS_PATH . '/section_dimensions.php';
 require_once SYS_PATH . '/section_functionals.php';
 require_once SYS_PATH . '/section_usewear.php';
+require_once SYS_PATH . '/section_primitive.php';
 require_once SYS_PATH . '/section_condition.php';
 require_once SYS_PATH . '/form.php';

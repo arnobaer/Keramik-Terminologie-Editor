@@ -19,41 +19,41 @@
  *
  */
 
-class SectionBasics extends AccordionSection
+/**
+ *
+ */
+class SectionMagerung extends AccordionSection
 {
-	const KEY_CATEGORY = 'basics_category';
+	// Used POST variable names.
+
 
 	public function __construct()
 	{
 		parent::__construct(
-			'basics',     // Element id
-			"Grundlagen", // Section title
-			10            // Page number
+			'magerung', // Element id
+			"Magerung", // Section title
+			12          // Page number
 		);
 	}
 
 	public function show_content()
 	{
 ?>
-		<table style="width:auto;">
+		<table>
 			<tr>
-				<td><?php $this->show_basic(); ?></td>
+				<td></td>
 			</tr>
 		</table>
 <?php
 	}
 
-	public function show_basic()
+	/**
+	 *
+	 */
+	public function show_()
 	{
-		$input = new Choice(self::KEY_CATEGORY, false);
-		$input->addChoice('Irdenware', false, true);
-		$input->addChoice('Fayence');
-		$input->addChoice('Steingut');
-		$input->addChoice('Steinzeug');
-		$input->addChoice('Porzellan');
-
-		$box = new Box('basics_category', "Keramikgattung", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('functionals_foot', "Standvorrichtungen", '');
+		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */

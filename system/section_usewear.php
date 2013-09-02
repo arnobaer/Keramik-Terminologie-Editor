@@ -26,11 +26,7 @@ class SectionUsewear extends AccordionSection
 {
 	// Used POST variable names.
 
-	const KEY_USEWEAR   = 'KEY_USEWEAR_USEWEAR';
-
-	// Used variable values to be compared somewhere.
-
-	const VAL_USEWEAR = "usewear";
+	const USEWEAR   = 'usewear_usewear';
 
 	/** Constructor. */
 	public function __construct()
@@ -57,15 +53,15 @@ class SectionUsewear extends AccordionSection
 	/** Specify the degree of use-wear. */
 	protected function show_usewear()
 	{
-		$input = new TextArea(self::KEY_USEWEAR, '<br/>Beschreibung der Gebrauchsspuren (Abreibespuren, Schmauchspuren, Reparaturen, etc.)');
+		$input = new TextAreaWidget(self::USEWEAR, '<br/>Beschreibung der Gebrauchsspuren (Abreibespuren, Schmauchspuren, Reparaturen, etc.)');
 
-		$box = new Box('useware2', "Gebrauchsspuren (optional)", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('useware2', "Gebrauchsspuren (optional)", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */
 	static public function get_long_description() {
-		$result = ucfirst(post(SectionUsewear::KEY_USEWEAR));
+		$result = ucfirst(post(SectionUsewear::USEWEAR));
 
 		// Could be done better.
 		$result = trim($result);

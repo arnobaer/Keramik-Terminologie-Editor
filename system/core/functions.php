@@ -113,8 +113,9 @@ function str_ral_color($input)
  */
 function str_named_color($input)
 {
+	$munsell = new MunsellSoilColors();
 	$input = str_replace('  ', ' ', trim($input)); // strip double spaces.
-	foreach ($this->munsell->dict as $en => $de) {
+	foreach ($munsell->dict as $en => $de) {
 		if ($input == $en or $input == $de)
 			return $input;
 	}
@@ -131,14 +132,14 @@ function str_clean_color($name, &$valid, &$munsell)
 	$munsell = true;
 	$input = post($name);
 	if (!$input) return '';
-	$color = $this->getMunsellColor($input);
+	$color = str_munsell_color($input);
 	if ($color)
 		return $color;
 	$munsell = false;
-	$color = $this->getRalColor($input);
+	$color = str_ral_color($input);
 	if ($color)
 		return $color;
-	$color = $this->getNamedColor($input);
+	$color = str_named_color($input);
 	if ($color)
 		return $color;
 	$valid = false;
@@ -149,16 +150,17 @@ function str_clean_color($name, &$valid, &$munsell)
  */
 function str_colors($name1, $name2)
 {
-	$color1 = $this->getCleanColor($name1, $valid1, $munsell1);
-	$color2 = $this->getCleanColor($name2, $valid2, $munsell2);
+	$munsell = new MunsellSoilColors();
+	$color1 = str_clean_color($name1, $valid1, $munsell1);
+	$color2 = str_clean_color($name2, $valid2, $munsell2);
 	if ($color1 == $color2) $color2 = false;
 	$html = '';
 	if ($color1 and $color2) {
 		$name1 = '';
 		$name2 = '';
 		if ($munsell1) {
-			$en = $this->munsell->getName($color1);
-			$de = $this->munsell->getTranslation($en);
+			$en = $munsell->getName($color1);
+			$de = $munsell->getTranslation($en);
 			$name1 = ($de?"$de":'');
 			$name2 = "$color1".($en?" $en":'');
 		}
@@ -167,8 +169,8 @@ function str_colors($name1, $name2)
 			$name1 = $color1;
 		}
 		if ($munsell2) {
-			$en = $this->munsell->getName($color2);
-			$de = $this->munsell->getTranslation($en);
+			$en = $munsell->getName($color2);
+			$de = $munsell->getTranslation($en);
 			$name1 .= " bis ".($de?"$de":'');
 			$name2 .= " bis $color2".($en?" $en":'');
 		}
@@ -183,8 +185,8 @@ function str_colors($name1, $name2)
 	}
 	if ($color1) {
 		if ($munsell1) {
-			$en = $this->munsell->getName($color1);
-			$de = $this->munsell->getTranslation($en);
+			$en = $munsell->getName($color1);
+			$de = $munsell->getTranslation($en);
 			$html = ($de?"$de ":'')."($color1".($en?" $en":'').')';
 		}
 		else

@@ -58,8 +58,7 @@ class SectionFunctionals extends AccordionSection
 	/** Specify foot type. */
 	public function show_standvorrichtungen()
 	{
-		$input = new Choice(self::KEY_FOOT, false);
-		$input->addChoice(self::VAL_NOT_SPECIFIED, "keine Angabe");
+		$input = new ChoiceWidget(self::KEY_FOOT);
 		$input->addChoice("Hohlfuß");
 		$input->addChoice("Massivfuß");
 		$input->addChoice("zapfenförmiger Massivfuß");
@@ -67,33 +66,33 @@ class SectionFunctionals extends AccordionSection
 		$input->addChoice("zylindrischer Massivfuß", "zylindrischer/amorpher Massivfuß");
 		$input->addChoice("Standring");
 
-		$box = new Box('functionals_foot', "Standvorrichtungen", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('functionals_foot', "Standvorrichtungen", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Specify handling zone type. */
 	public function show_handhaben()
 	{
-		$input = new MultiChoice(self::KEY_HANDLES);
+		$input = new MultiChoiceWidget(self::KEY_HANDLES);
 		$input->addChoice("Grifflappen");
 		$input->addChoice("Knauf");
 		$input->addChoice("Knubbe");
 		$input->addChoice("Rohrgriff");
 		$input->addChoice("Stielgriff");
 
-		$box = new Box('functionals_handles', "Handhaben", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('functionals_handles', "Handhaben", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Specify handle type. */
 	public function show_handhaben_henkel()
 	{
-		$input = new MultiChoice(self::KEY_BAIL);
+		$input = new MultiChoiceWidget(self::KEY_BAIL);
 		$input->addChoice('Bandhenkel');
 		$input->addChoice('Wulsthenkel');
 
-		$box = new Box('functionals_bail', "Handhaben/Henkel", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('functionals_bail', "Handhaben/Henkel", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */

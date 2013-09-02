@@ -19,7 +19,8 @@
  *
  */
 
-class MultiChoice {
+class MultiChoiceWidget
+{
 
 	private $_key;
 

@@ -67,26 +67,26 @@ class SectionDimensions extends AccordionSection
 	public function show_rim()
 	{
 
-		$input = new TextInput(self::KEY_RIM, 'Randdurchmesser (cm)');
+		$input = new TextInputWidget(self::KEY_RIM, 'Randdurchmesser (cm)');
 
-		$input2 = new TextInput(self::KEY_MAXIMUM, 'Maximaldurchmesser (cm)');
+		$input2 = new TextInputWidget(self::KEY_MAXIMUM, 'Maximaldurchmesser (cm)');
 
-		$input3 = new TextInput(self::KEY_BOTTOM, 'Bodendurchmesser (cm)');
+		$input3 = new TextInputWidget(self::KEY_BOTTOM, 'Bodendurchmesser (cm)');
 
-		$box = new Box('dimensions', "Durchmesser", $input->getHtml().$input2->getHtml().$input3->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('dimensions', "Durchmesser", $input->getHtml().$input2->getHtml().$input3->getHtml());
+		echo $fieldset->show();
 	}
 
 	public function show_wall_thickness()
 	{
-		$input = new TextInput(self::KEY_WALL_THICKNESS, 'Wandstärke von&ndash;bis (cm)');
+		$input = new TextInputWidget(self::KEY_WALL_THICKNESS, 'Wandstärke von&ndash;bis (cm)');
 
-		$input2 = new TextInput(self::KEY_HEIGHT, '(erh.) Höhe (cm)');
+		$input2 = new TextInputWidget(self::KEY_HEIGHT, '(erh.) Höhe (cm)');
 
-		$input3 = new TextInput(self::KEY_RIM_PRESERVED, 'Randerhalt (%)');
+		$input3 = new TextInputWidget(self::KEY_RIM_PRESERVED, 'Randerhalt (%)');
 
-		$box = new Box('dimensions_2', "Abmessungen", $input->getHtml().$input2->getHtml().$input3->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('dimensions_2', "Abmessungen", $input->getHtml().$input2->getHtml().$input3->getHtml());
+		echo $fieldset->show();
 	}
 
 	public function rim_diameter()

@@ -21,7 +21,6 @@ body{
 	/* Well, sadly, most of the archeologists work on Windows OS. */
 	font: 62.5% "Trebuchet MS", sans-serif;
 	font-size: .7em;
-	margin: 50px;
 }
 h1, h2, h3, h4, h5 {
 	font-family: "Georgia", "Times New Roman", serif;
@@ -166,6 +165,10 @@ table td {
 }
 
 /* Section specific settings. */
+
+#production_container input[type=text] {
+    width: 80px!important;
+}
 
 #dimensions_container input[type=text] {
     width: 50px!important;

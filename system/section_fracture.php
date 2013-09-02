@@ -32,8 +32,6 @@ class SectionFracture extends AccordionSection
 
 	// Used variable values to be compared somewhere.
 
-	const VAL_NOT_SPECIFIED = 0;
-
 	const VAL_PLAIN = "glatt";
 	const VAL_GRAINY = "körnig";
 
@@ -72,39 +70,36 @@ class SectionFracture extends AccordionSection
 	/** */
 	protected function show_fracture_haptic()
 	{
-		$input = new Choice(self::KEY_FRACTURE_HAPTIC, false);
-		$input->addChoice(self::VAL_NOT_SPECIFIED, "keine Angabe");
+		$input = new ChoiceWidget(self::KEY_FRACTURE_HAPTIC);
 		$input->addChoice(self::VAL_PLAIN, 'glatt (haptisch)');
 		$input->addChoice(self::VAL_GRAINY, 'körnig (haptisch)');
 
-		$box = new Box('fracture_haptic', "Bruchstruktur (haptisch)", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('fracture_haptic', "Bruchstruktur (haptisch)", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** */
 	protected function show_fracture_optic()
 	{
-		$input = new Choice(self::KEY_FRACTURE_OPTIC, false);
-		$input->addChoice(self::VAL_NOT_SPECIFIED, "keine Angabe");
+		$input = new ChoiceWidget(self::KEY_FRACTURE_OPTIC);
 		$input->addChoice(self::VAL_FISSURED, 'geklüftet (optisch)');
 		$input->addChoice(self::VAL_LAYERED, 'geschichtet/splittrig (optisch)');
 		$input->addChoice(self::VAL_CONCHOIDAL, 'muschelig (optisch)');
 
-		$box = new Box('fracture_haptic', "Bruchstruktur (optisch)", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('fracture_haptic', "Bruchstruktur (optisch)", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** */
 	protected function show_fracture_pores()
 	{
-		$input = new Choice(self::KEY_FRACTURE_PORES, false);
-		$input->addChoice(self::VAL_NOT_SPECIFIED, "keine Angabe");
+		$input = new ChoiceWidget(self::KEY_FRACTURE_PORES);
 		$input->addChoice(self::VAL_LONGISH);
 		$input->addChoice(self::VAL_ROUNDISH);
 
-		$box = new Box('fracture_haptic_optic', "Porenform", $input->getHtml() .
+		$fieldset = new FieldsetWidget('fracture_haptic_optic', "Porenform", $input->getHtml() .
 			"<p class=\"infobox\" style=\"\"><strong>Hinweis:</strong> Form der Poren in der Matrix, nicht der ausgefallenen Partikel. Nur am Dünnschliff erkennbar.</p>");
-		echo $box->show();
+		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */

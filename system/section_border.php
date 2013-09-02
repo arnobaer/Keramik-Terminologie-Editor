@@ -26,15 +26,15 @@ class SectionBorder extends AccordionSection
 {
 	// Used POST variable names.
 
-	const KEY_BORDER_SPOUT = 'KEY_BORDER_SPOUT';
-	const KEY_BORDER_FORMAL = 'KEY_BORDER_FORMAL';
-	const KEY_BORDER_ASSEMBLY = 'KEY_BORDER_ASSEMBLY';
-	const KEY_BORDER_SHAPE = 'KEY_BORDER_SHAPE';
-	const KEY_BORDER_CONTOUR = 'KEY_BORDER_CONTOUR';
+	const ID_SPOUT    = 'border_spout';
+	const ID_FORMAL   = 'border_formal';
+	const ID_ASSEMBLY = 'border_assembly';
+	const ID_SHAPE    = 'border_shape';
+	const ID_CONTOUR  = 'border_contour';
 
 	// Used variable values to be compared somewhere.
 
-	const VAL_NOT_SPECIFIED = 0;
+	const VALUE_NOT_SPECIFIED = 0;
 
 
 	/** Constructor. */
@@ -45,6 +45,31 @@ class SectionBorder extends AccordionSection
 			"Randbereich", // Section title
 			27             // Page number
 		);
+	}
+
+	public function spout()
+	{
+		return post(self::ID_SPOUT);
+	}
+
+	public function formal()
+	{
+		return post(self::ID_FORMAL);
+	}
+
+	public function assembly()
+	{
+		return post(self::ID_ASSEMBLY);
+	}
+
+	public function shape()
+	{
+		return post(self::ID_SHAPE);
+	}
+
+	public function contour()
+	{
+		return post(self::ID_CONTOUR);
 	}
 
 	/** Print all subsections. */
@@ -70,16 +95,16 @@ class SectionBorder extends AccordionSection
 	/** */
 	protected function show_border_spout()
 	{
-		$input = new TextInput(self::KEY_BORDER_SPOUT, " z. B. runde, kleeblattförmige, vierpassförmige, viereckige, dreieckige.", false);
+		$input = new TextInputWidget(self::ID_SPOUT, " z. B. runde, kleeblattförmige, vierpassförmige, viereckige, dreieckige.", false);
 
-		$box = new Box('border_spout', "Mündung", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('border_spout', "Mündung", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** */
 	protected function show_border_formal()
 	{
-		$input = new Choice(self::KEY_BORDER_FORMAL);
+		$input = new ChoiceWidget(self::ID_FORMAL);
 		$input->addChoice('gerundet');
 		$input->addChoice('gekehlt');
 		$input->addChoice('flach');
@@ -87,14 +112,14 @@ class SectionBorder extends AccordionSection
 		$input->addChoice('gerillt');
 		$input->addChoice('gekantet');
 
-		$box = new Box('border_form', 'Formalbeschreibung', $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('border_form', 'Formalbeschreibung', $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** */
 	protected function show_border_assembly()
 	{
-		$input = new Choice(self::KEY_BORDER_ASSEMBLY);
+		$input = new ChoiceWidget(self::ID_ASSEMBLY);
 		$input->addChoice('abgeschnitten');
 		$input->addChoice('zugeschnitten');
 		$input->addChoice('beschnitten', 'beschnitten (Draht, Schnur, Messer)');
@@ -102,14 +127,14 @@ class SectionBorder extends AccordionSection
 		$input->addChoice('gerillt');
 		$input->addChoice('gekantet');
 
-		$box = new Box('border_assembly', "Herstellungstechnische Beschreibung", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('border_assembly', "Herstellungstechnische Beschreibung", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** */
 	protected function show_border_shape()
 	{
-		$input = new Choice(self::KEY_BORDER_SHAPE);
+		$input = new ChoiceWidget(self::ID_SHAPE);
 		$input->addChoice('nicht verstärkter Rand');
 		$input->addChoice('aufgestellter Rand');
 		$input->addChoice('verstärkter Rand');
@@ -121,14 +146,14 @@ class SectionBorder extends AccordionSection
 		$input->addChoice('Rollrand');
 		$input->addChoice('Sichelrand');
 
-		$box = new Box('border_shape', "Randform", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('border_shape', "Randform", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** */
 	protected function show_border_contour()
 	{
-		$input = new Choice(self::KEY_BORDER_CONTOUR);
+		$input = new ChoiceWidget(self::ID_CONTOUR);
 		$input->addChoice('vertikaler Rand');
 		$input->addChoice('ausladender Rand');
 		$input->addChoice('steil ausladender Rand');
@@ -144,8 +169,8 @@ class SectionBorder extends AccordionSection
 		$input->addChoice('profilierter Rand');
 		$input->addChoice('Fahne');
 
-		$box = new Box('border_contour', "Randkontur", $input->getHtml());
-		echo $box->show();
+		$fieldset = new FieldsetWidget('border_contour', "Randkontur", $input->getHtml());
+		echo $fieldset->show();
 	}
 
 	/** Returns long detailed description. */
@@ -153,15 +178,15 @@ class SectionBorder extends AccordionSection
 	{
 		$border = array();
 
-		$spout = post(self::KEY_BORDER_SPOUT);
+		$spout = self::spout();
 		$spout = str_replace('Mündung', '', $spout);
 		$spout = str_replace('mündung', '', $spout);
 		$spout = trim($spout);
 
-		$shape = post(self::KEY_BORDER_SHAPE);
-		$contour = post(self::KEY_BORDER_CONTOUR);
-		$assembly = post(self::KEY_BORDER_ASSEMBLY);
-		$shapeal = post(self::KEY_BORDER_FORMAL);
+		$shape = self::shape();
+		$contour = self::contour();
+		$assembly = self::assembly();
+		$shapeal = self::formal();
 
 		if ($contour == 'Fahne') { $shape = 'Fahne'; $contour = ''; } // Superior.
 		if ($shapeal) $border[] = "{$shapeal}er";
