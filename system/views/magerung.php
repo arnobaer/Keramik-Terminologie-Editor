@@ -1,4 +1,4 @@
-<?php define('KeramikTerminologieEditor', true);
+<?php defined('KeramikTerminologieEditor') or die();
 
 /**
  * Keramik Terminologie Editor
@@ -19,8 +19,24 @@
  *
  */
 
-include_once('system/config.php');
+?>
 
-$form = new ApplicationForm();
-
-include VIEW_PATH . '/document.php';
+					<table>
+						<tr>
+							<td style="width:33%">
+								<?php echo $magerungsart; ?>
+								<?php echo $magerungstyp; ?>
+								<?php echo $magerungstyp_anmerkung; ?>
+							</td>
+							<td style="width:33%" rowspan="1">
+								<?php echo $sortierung; ?>
+								<?php echo $korngroesse; ?>
+								<?php echo $menge; ?>
+							</td>
+							<td style="width:33%" rowspan="1">
+								<?php echo $magerungsform; ?>
+								<?php echo $verteilung; ?>
+								<?php echo $verteilung_anmerkung; ?>
+							</td>
+						</tr>
+					</table>

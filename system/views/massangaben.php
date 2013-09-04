@@ -1,4 +1,4 @@
-<?php define('KeramikTerminologieEditor', true);
+<?php defined('KeramikTerminologieEditor') or die();
 
 /**
  * Keramik Terminologie Editor
@@ -19,8 +19,12 @@
  *
  */
 
-include_once('system/config.php');
+?>
 
-$form = new ApplicationForm();
-
-include VIEW_PATH . '/document.php';
+					<table style="width:100%;">
+						<tr>
+							<td><?php echo $durchmesser; ?></td>
+							<td><?php echo $masse; ?></td>
+							<td style="width:33%;"><p class="infobox" style="margin-top:7px;"><?php echo $information; ?></p></td>
+						</tr>
+					</table>

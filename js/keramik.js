@@ -24,7 +24,7 @@ $(function() {
 		activeHeader: "ui-icon-circle-arrow-s"
 	};
 
-	$( "#accordion" ).accordion({
+	$("#accordion").accordion({
 		active: false,
 		icons: icons,
 		heightStyle: "content",
@@ -34,27 +34,32 @@ $(function() {
 		}
 	});
 
-	$( "#radioset" ).buttonset();
+	$("#grundform_tabs").tabs({
+		active: false,
+		activate: function( event, ui ) {
+			document.getElementById("tab_active").setAttribute("value", $("#grundform_tabs").tabs("option", "active"));
+		}
+	});
 
-	$( "#submit_button" ).button({
+	$("#radioset").buttonset();
+
+	$("#submit_button").button({
 		icons: {
 			primary: "ui-icon-arrowrefresh-1-s"
 		}
 	});
 
-	$( "#reset_button" ).button({
+	$("#reset_button").button({
 		icons: {
 			primary: "ui-icon-arrowreturn-1-w"
 		}
 	});
 
-	$( "#grundform_tabs" ).tabs();
-
-	var List_UseWear = [
+	var ListGebrauchsspuren = [
 		"Abreibespuren", "Schmauchspuren", "Reparaturen"
 	];
 
-	var List_BorderSpout = [
+	var ListRandbereichMuendung = [
 		"runde", "ovale", "kleeblattförmige", "dreipassförmige", "vierpassförmige", "dreieckige", "viereckige", "polygonale"
 	];
 
@@ -66,7 +71,7 @@ $(function() {
 	}
 
 	/* Multi word auto complete for use-wear section. */
-	$( "#text_usewear_usewear" )
+	$("#text_gebrauchsspuren_gebrauchsspuren")
 		// don't navigate away from the field on tab when selecting an item
 		.bind( "keydown", function( event ) {
 			if ( event.keyCode === $.ui.keyCode.TAB &&
@@ -79,7 +84,7 @@ $(function() {
 		source: function( request, response ) {
 			// delegate back to autocomplete, but extract the last term
 			response( $.ui.autocomplete.filter(
-				List_UseWear, extractLast( request.term ) ) );
+				ListGebrauchsspuren, extractLast( request.term ) ) );
 		},
 		focus: function() {
 			// prevent value inserted on focus
@@ -99,7 +104,7 @@ $(function() {
 	});
 
 	/* Single word auto complete for border section. */
-	$( "#text_border_spout" ).autocomplete({
-		source: List_BorderSpout
+	$("#text_randbereich_muendung").autocomplete({
+		source: ListRandbereichMuendung
 	});
 });

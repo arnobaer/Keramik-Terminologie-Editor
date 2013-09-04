@@ -1,4 +1,4 @@
-<?php define('KeramikTerminologieEditor', true);
+<?php defined('KeramikTerminologieEditor') or die();
 
 /**
  * Keramik Terminologie Editor
@@ -19,8 +19,27 @@
  *
  */
 
-include_once('system/config.php');
+/** Implements a simple fieldset with title.
 
-$form = new ApplicationForm();
+*/
+class FieldsetWidget extends Controller
+{
+	/** Constructor. */
+	public function __construct($id, $title, $content)
+	{
+		$this->id = $id;
+		$this->title = $title;
+		$this->content = $content;
+	}
 
-include VIEW_PATH . '/document.php';
+	/** Print section to stdout. */
+	public function getHtml()
+	{
+		$data = array(
+			'id' => $this->id,
+			'title' => $this->title,
+			'content' => $this->content,
+		);
+		return $this->loadView('fieldset_widget', $data, false);
+	}
+}

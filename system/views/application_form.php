@@ -1,4 +1,4 @@
-<?php define('KeramikTerminologieEditor', true);
+<?php defined('KeramikTerminologieEditor') or die();
 
 /**
  * Keramik Terminologie Editor
@@ -19,8 +19,21 @@
  *
  */
 
-include_once('system/config.php');
+?>
 
-$form = new ApplicationForm();
+		<!-- Calculated description, long and short version. -->
+		<?php echo $description; ?>
 
-include VIEW_PATH . '/document.php';
+		<form action="<?php echo $url; ?>#<?php echo $anchor; ?>" method="post">
+			<input type="hidden" name="session" value="<?php echo $session; ?>">
+			<input id="accordion_active" type="hidden" name="accordion_active" value="">
+			<input id="tab_active" type="hidden" name="tab_active" value="">
+
+			<?php echo $accordion; ?>
+
+			<div>
+			<hr>
+			<button id="submit_button" type="submit" name="<?php echo $submit_name; ?>" value="submit">Text erzeugen</button>
+			<button id="reset_button" type="submit" name="<?php echo $reset_name; ?>" value="reset">Zurücksetzen</button>
+			</div>
+		</form>

@@ -30,11 +30,15 @@
 </head>
 <body>
 
+	<a id="github_ribbon" href="<?php echo AppGithubUrl; ?>"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
 	<div style="width:960px; margin:0 auto; padding: 0;">
 
 <?php include VIEW_PATH.'/document_header.php'; ?>
 
-		<div class="clear space"></div>
+		<!-- ID report is the anchor for displaying the following report in a
+			visually appealing way. -->
+		<div id="beschreibung" class="clear space"></div>
 
 		<?php $form->run(); ?>
 
@@ -53,7 +57,10 @@
 	<script src="js/keramik-condition.js"></script>
 
 	<!-- This restores the last open accordion panel. -->
-	<script type="text/javascript">$(function() {$("#accordion").accordion("option", "active", <?php echo post('accordion_active', 'false'); ?>);});</script>
+	<script type="text/javascript">$(function() {$("#accordion").accordion("option", "active", <?php js_accordion_active(); ?>);});</script>
+
+	<!-- This restores the last active tab panel. -->
+	<script type="text/javascript">$(function() {$("#grundform_tabs").tabs("option", "active", <?php js_tabs_active(); ?>);});</script>
 
 </body>
 </html>

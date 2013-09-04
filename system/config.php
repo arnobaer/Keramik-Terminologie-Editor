@@ -19,32 +19,50 @@
  *
  */
 
+// Application overall version.
+const AppVersion    = '1.0.0 RC1';
+const AppTitle      = 'Keramik Terminologie Editor';
+const AppAuthors    = 'Bernhard R. Arnold';
+const AppLicense    = 'GNU/GPL-Lizenz 3.0';
+const AppLicenseUrl = 'http://www.gnu.org/licenses/gpl-3.0.txt';
+const AppGithubUrl  = 'http://github.com/arnobaer/Keramik-Terminologie-Editor';
+
+// Set system paths.
 const SYS_PATH  = 'system';
 const CTRL_PATH = 'system/controller';
 const CORE_PATH = 'system/core';
+const LIB_PATH  = 'system/lib';
 const VIEW_PATH = 'system/views';
 
-require_once CORE_PATH . '/munsell.php';
-require_once CORE_PATH . '/functions.php';
-require_once CORE_PATH . '/fieldset_widget.php';
-require_once CORE_PATH . '/choice_widget.php';
-require_once CORE_PATH . '/multi_choice_widget.php';
-require_once CORE_PATH . '/text_input_widget.php';
-require_once CORE_PATH . '/text_area_widget.php';
+// Include external libraries.
+require_once LIB_PATH . '/Summoning.php';
+require_once LIB_PATH . '/MunsellSoilColors.php';
 
-require_once SYS_PATH . '/accordion.php';
-require_once SYS_PATH . '/accordion_section.php';
-require_once CTRL_PATH . '/section_grundlagen.php';
-require_once CTRL_PATH . '/section_magerung.php';
-require_once SYS_PATH . '/section_surface.php';
-require_once SYS_PATH . '/section_production.php';
-require_once SYS_PATH . '/section_fracture.php';
-require_once SYS_PATH . '/section_border.php';
-require_once SYS_PATH . '/section_wall.php';
-require_once SYS_PATH . '/section_bottom.php';
-require_once SYS_PATH . '/section_dimensions.php';
-require_once SYS_PATH . '/section_functionals.php';
-require_once SYS_PATH . '/section_usewear.php';
-require_once SYS_PATH . '/section_primitive.php';
-require_once SYS_PATH . '/section_condition.php';
-require_once SYS_PATH . '/form.php';
+// Include core classes.
+require_once CORE_PATH . '/functions.php';
+require_once CORE_PATH . '/Controller.php';
+
+// Include HTML widget classes.
+require_once CORE_PATH . '/FieldsetWidget.php';
+require_once CORE_PATH . '/ChoiceWidget.php';
+require_once CORE_PATH . '/MultiChoiceWidget.php';
+require_once CORE_PATH . '/LineEditWidget.php';
+require_once CORE_PATH . '/TextAreaWidget.php';
+require_once CORE_PATH . '/AccordionSectionWidget.php';
+require_once CORE_PATH . '/AccordionWidget.php';
+
+// Include section controller classes.
+require_once CTRL_PATH . '/SectionGrundlagen.php';
+require_once CTRL_PATH . '/SectionMagerung.php';
+require_once CTRL_PATH . '/SectionOberflaeche.php';
+require_once CTRL_PATH . '/SectionHerstellung.php';
+require_once CTRL_PATH . '/SectionBruch.php';
+require_once CTRL_PATH . '/SectionRandbereich.php';
+require_once CTRL_PATH . '/SectionWandbereich.php';
+require_once CTRL_PATH . '/SectionBodenbereich.php';
+require_once CTRL_PATH . '/SectionMassangaben.php';
+require_once CTRL_PATH . '/SectionFunktionselemente.php';
+require_once CTRL_PATH . '/SectionGebrauchsspuren.php';
+require_once CTRL_PATH . '/SectionGrundform.php';
+require_once CTRL_PATH . '/SectionErhaltungszustand.php';
+require_once CTRL_PATH . '/ApplicationForm.php';

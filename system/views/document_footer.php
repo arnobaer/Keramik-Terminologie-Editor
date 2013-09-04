@@ -19,12 +19,9 @@
  *
  */
 
-const FooterLicense    = 'GNU/GPL-Lizenz 3.0';
-const FooterLicenseUrl = 'http://www.gnu.org/licenses/gpl-3.0.txt';
-const FooterAuthors    = 'Bernhard R. Arnold';
-
 ?>
 		<div class="ui-widget footer">
-			<p><em>Keramik Terminologie Editor</em> ist freie, unter der <a href="<?php echo FooterLicenseUrl; ?>"><?php echo FooterLicense; ?></a> veröffentlichte Software.<br>
-			Copyright &copy; 2012&ndash;2013 <?php echo FooterAuthors; ?></p>
+			<p><em><?php echo AppTitle; ?></em> ist freie, unter der <a href="<?php echo AppLicenseUrl; ?>"><?php echo AppLicense; ?></a> veröffentlichte Software.<br>
+			Version <?php echo AppVersion; ?> - der aktuelle Quellcode ist auf <a href="<?php echo AppGithubUrl; ?>">GitHub</a> frei verfügbar.<br>
+			Copyright &copy; 2012&ndash;2013 <?php echo AppAuthors; ?></p>
 		</div>

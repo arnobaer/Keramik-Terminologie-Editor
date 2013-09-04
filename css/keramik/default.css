@@ -158,22 +158,43 @@ table td {
 }
 
 .infobox {
-	border:1px solid #ddd;
-	border-radius:5px;
-	background-color:#ffd;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #ffd;
 	padding: 7px;
 }
 
 /* Section specific settings. */
 
-#production_container input[type=text] {
+#herstellung_container input[type=text] {
     width: 80px!important;
 }
 
-#dimensions_container input[type=text] {
+#massangaben_container input[type=text] {
     width: 50px!important;
 }
 
-#text_key_condition_fragments_count {
+#text_erhaltungszustand_anzahl_fragmente {
     text-align: right;
+}
+
+#vorschau_grundform {
+	font-family: sans-serif;
+}
+
+#grundform_tabs p {
+	font-style: italic;
+}
+
+#grundform_tabs div div {
+	min-height: 400px;
+}
+
+/* Conditional formatting. */
+
+/* This hides the "fork me on github" ribbon on the right top area. */
+@media screen and (max-width: 990px) {
+	#github_ribbon {
+		display: none;
+	}
 }

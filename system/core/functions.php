@@ -39,6 +39,28 @@ function post($key, $default = false)
 	return $default;
 }
 
+/** Returns server URI.
+ */
+function get_url()
+{
+	return $_SERVER["REQUEST_URI"];
+}
+
+/** Replaces only last occurrence of string.
+ * @param search
+ * @param replace
+ * @param subject
+ * @returns replaced string.
+ */
+function str_replace_last_occurrence($search, $replace, $subject)
+{
+	$pos = strrpos($subject, $search);
+	if($pos !== false) {
+		$subject = substr_replace($subject, $replace, $pos, strlen($search));
+	}
+	return $subject;
+}
+
 /** Filters a floating point value from any input string and returns a formatted
  * string with unit suffix.
  * @param input any string containing a numeric information.
@@ -193,4 +215,16 @@ function str_colors($name1, $name2)
 			$html = $color1;
 	}
 	return $html;
+}
+
+function js_accordion_active()
+{
+	$active = post('accordion_active');
+	echo $active ? $active : 'false';
+}
+
+function js_tabs_active()
+{
+	$active = post('tab_active');
+	echo $active ? $active : 'false';
 }

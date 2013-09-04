@@ -21,7 +21,7 @@
 
 ?>
 
-					<fieldset id="<?php echo $this->id; ?>_fieldset">
-						<legend id="<?php echo $this->id; ?>_box_title"><?php echo $this->title; ?></legend>
-						<?php echo $this->content; ?>
+					<fieldset id="<?php echo $id; ?>_fieldset">
+						<legend id="<?php echo $id; ?>_fieldset_legend"><?php echo $title; ?></legend>
+						<?php echo $content; ?>
 					</fieldset>

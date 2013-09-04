@@ -1,4 +1,4 @@
-<?php define('KeramikTerminologieEditor', true);
+<?php defined('KeramikTerminologieEditor') or die();
 
 /**
  * Keramik Terminologie Editor
@@ -19,8 +19,13 @@
  *
  */
 
-include_once('system/config.php');
+?>
 
-$form = new ApplicationForm();
-
-include VIEW_PATH . '/document.php';
+					<table>
+						<tr>
+							<td><?php echo $halszone; ?></td>
+							<td><?php echo $schulterzone; ?></td>
+							<td><?php echo $bauchzone; ?></td>
+							<td><?php echo $fusszone; ?></td>
+						</tr>
+					</table>
