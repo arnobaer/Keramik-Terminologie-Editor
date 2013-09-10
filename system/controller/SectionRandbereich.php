@@ -175,6 +175,10 @@ class SectionRandbereich extends AccordionSectionWidget
 		if ($randform and $kontur) $kontur = str_replace(' Rand', '', $kontur);
 		if ($kontur) $randbereich[] = $kontur;
 		if ($randform) $randbereich[] = $randform;
+
+		if ((!$randform and !$kontur) and ($herstellung or $randformal))
+			$randbereich[sizeof($randbereich)-1] .= " Rand";
+
 		if ($muendung) $randbereich[] = $muendung . ' Mündung';
 
 		return implode(', ', $randbereich);

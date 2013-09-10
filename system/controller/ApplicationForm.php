@@ -37,8 +37,6 @@ function get_table($table, $header = false)
 	return $html.'</table>'.PHP_EOL;
 }
 
-const VERSION = 'Version 0.21, 2013/03/2, unstable';
-
 class ApplicationForm extends Controller
 {
 	const RequestReset = 'request_reset';
@@ -111,8 +109,8 @@ class ApplicationForm extends Controller
 		$randkontur  = SectionRandbereich::randkontur();
 		$herstellung = SectionRandbereich::herstellung();
 		$formal      = SectionRandbereich::formalbeschreibung();
-		if ((!$randform and !$randkontur) and ($herstellung or $formal))
-			$list .= " Rand";
+// 		if ((!$randform and !$randkontur) and ($herstellung or $formal))
+// 			$list .= " Rand";
 
 		return $list ? "<strong>Beschreibung:</strong> {$list}.<br>" : '';
 	}
