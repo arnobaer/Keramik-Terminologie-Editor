@@ -1,5 +1,3 @@
-<?php defined('KeramikTerminologieEditor') or die();
-
 /**
  * Keramik Terminologie Editor
  * Copyright (C) 2012-2013  Bernhard R. Arnold
@@ -19,22 +17,6 @@
  *
  */
 
-/** Implements a simple fieldset with title.
-
-*/
-class FieldsetWidget
-{
-	/** Constructor. */
-	public function __construct($id, $title, $content)
-	{
-		$this->id = $id;
-		$this->title = $title;
-		$this->content = $content;
-	}
-
-	/** Print section to stdout. */
-	public function show()
-	{
-		include VIEW_PATH.'/fieldset_widget.php';
-	}
+function erhaltungszustand_image(fragmentierung) {
+	document.getElementById("erhaltungszustand_figure").setAttribute("src", "images/erhaltungszustand_" + fragmentierung + ".png");
 }

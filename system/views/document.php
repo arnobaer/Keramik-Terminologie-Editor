@@ -27,6 +27,21 @@
 	<link href="css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 	<link href="css/keramik/default.css" rel="stylesheet">
 	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+
+	<!-- Including the jQuery UI framework. -->
+	<script src="js/jquery-1.9.1.js"></script>
+	<script src="js/jquery-ui-1.10.3.custom.js"></script>
+
+	<!-- Including the custom section scripts. -->
+	<script src="js/keramik.js"></script>
+	<script src="js/keramik-erhaltungszustand.js"></script>
+
+	<!-- This restores the last open accordion panel. -->
+	<script type="text/javascript">$(function() {$("#accordion").accordion("option", "active", <?php js_accordion_active(); ?>);});</script>
+
+	<!-- This restores the last active tab panel. -->
+	<script type="text/javascript">$(function() {$("#grundform_tabs").tabs("option", "active", <?php js_tabs_active(); ?>);});</script>
+
 </head>
 <body>
 
@@ -48,19 +63,10 @@
 
 	</div>
 
-	<!-- Including the jQuery UI framework. -->
-	<script src="js/jquery-1.9.1.js"></script>
-	<script src="js/jquery-ui-1.10.3.custom.js"></script>
-
-	<!-- Including the custom section scripts. -->
-	<script src="js/keramik.js"></script>
-	<script src="js/keramik-condition.js"></script>
-
-	<!-- This restores the last open accordion panel. -->
-	<script type="text/javascript">$(function() {$("#accordion").accordion("option", "active", <?php js_accordion_active(); ?>);});</script>
-
-	<!-- This restores the last active tab panel. -->
-	<script type="text/javascript">$(function() {$("#grundform_tabs").tabs("option", "active", <?php js_tabs_active(); ?>);});</script>
+	<div>
+	<p>Debug:</p>
+	<pre><?php print_r($_POST);?></pre>
+	</div>
 
 </body>
 </html>

@@ -64,7 +64,7 @@ class SectionGrundform extends AccordionSectionWidget
 	public function fieldsetUnsicher()
 	{
 		$input = new MultiChoiceWidget('grundform_unsicher');
-		$input->addChoice('Grundform unsicher (nicht eindeutig zuordenbar)');
+		$input->addChoice("unsicher", 'Grundform unsicher (nicht eindeutig zuordenbar)');
 		return $input->getHtml();
 	}
 

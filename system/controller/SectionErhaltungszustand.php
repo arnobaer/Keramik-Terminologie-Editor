@@ -60,29 +60,29 @@ class SectionErhaltungszustand extends AccordionSectionWidget
 	protected function fieldsetFragmentierung()
 	{
 		$input = new ChoiceWidget(self::IdFragmentierung, false);
-		$input->addChoice(ChoiceWidget::ValueNotSpecified, "keine Angabe", false, false, "condition_image('not_specified')");
-		$input->addChoice(self::ValueVollstaendigErhalten, "vollständig erhalten", false, false, "condition_image('complete_extent')");
-		$input->addChoice(self::ValueAllgemeineFragmente, "allg. Fragment(e)", false, false, "condition_image('general_fragments')");
-		$input->addChoice(self::ValueRandfragment, false, false, false, "condition_image('rim')");
-		$input->addChoice(self::ValueRandWandfragment, false, false, false, "condition_image('rim_wall')");
-		$input->addChoice(self::ValueWandfragment, false, false, false, "condition_image('wall')");
-		$input->addChoice(self::ValueWandBodenfragment, false, false, false, "condition_image('wall_bottom')");
-		$input->addChoice(self::ValueBodenfragment, false, false, false, "condition_image('bottom')");
+		$input->addChoice(ChoiceWidget::ValueNotSpecified, "keine Angabe", false, false, "erhaltungszustand_image('keine_angabe')");
+		$input->addChoice(self::ValueVollstaendigErhalten, "vollständig erhalten", false, false, "erhaltungszustand_image('vollstaendig_erhalten')");
+		$input->addChoice(self::ValueAllgemeineFragmente, "allg. Fragment(e)", false, false, "erhaltungszustand_image('allgemeine_fragmente')");
+		$input->addChoice(self::ValueRandfragment, false, false, false, "erhaltungszustand_image('randfragment')");
+		$input->addChoice(self::ValueRandWandfragment, false, false, false, "erhaltungszustand_image('rand_wandfragment')");
+		$input->addChoice(self::ValueWandfragment, false, false, false, "erhaltungszustand_image('wandfragment')");
+		$input->addChoice(self::ValueWandBodenfragment, false, false, false, "erhaltungszustand_image('wand_bodenfragment')");
+		$input->addChoice(self::ValueBodenfragment, false, false, false, "erhaltungszustand_image('bodenfragment')");
 
 		// Image path translation.
 		$image = array(
-			ChoiceWidget::ValueNotSpecified => 'not_specified',
-			self::ValueVollstaendigErhalten => 'complete_extent',
-			self::ValueAllgemeineFragmente  => 'general_fragments',
-			self::ValueRandfragment         => 'rim',
-			self::ValueRandWandfragment     => 'rim_wall',
-			self::ValueWandfragment         => 'wall',
-			self::ValueWandBodenfragment    => 'wall_bottom',
-			self::ValueBodenfragment        => 'bottom',
+			ChoiceWidget::ValueNotSpecified => 'keine_angabe',
+			self::ValueVollstaendigErhalten => 'vollstaendig_erhalten',
+			self::ValueAllgemeineFragmente  => 'allgemeine_fragmente',
+			self::ValueRandfragment         => 'randfragment',
+			self::ValueRandWandfragment     => 'rand_wandfragment',
+			self::ValueWandfragment         => 'wandfragment',
+			self::ValueWandBodenfragment    => 'wand_bodenfragment',
+			self::ValueBodenfragment        => 'bodenfragment',
 		);
 
 		$content = '<div style="float:left; margin-right: 50px;">'.$input->getHtml().'</div>';
-		$content .= '<div><img id="condition_figure" src="images/condition_'.$image[post(self::IdFragmentierung)].'.png"></div>';
+		$content .= '<div><img id="erhaltungszustand_figure" src="images/erhaltungszustand_'.$image[post(self::IdFragmentierung)].'.png"></div>';
 		$content .= '<div style="clear:left;"></div>';
 
 		$fieldset = new FieldsetWidget('fragmentierung', "Fragmentierung", $content);
