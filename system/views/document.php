@@ -63,10 +63,5 @@
 
 	</div>
 
-	<div>
-	<p>Debug:</p>
-	<pre><?php print_r($_POST);?></pre>
-	</div>
-
 </body>
 </html>
