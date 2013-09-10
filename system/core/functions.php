@@ -72,7 +72,12 @@ function str_centimeters($input, $suffix = 'cm', $comma = ',')
 {
 	$input = str_replace(',', '.', $input); // Normalize commas.
 	preg_match_all('!\d+(?:\.\d+)?|(?:\.\d+)!', $input, $matches);
-	return (sizeof($matches[0]) ? (str_replace('.', $comma, round($matches[0][0], 1)).($suffix ? " {$suffix}" : '')) : false);
+	# Return false if no value found.
+	if (sizeof($matches[0]) < 1) {
+		return false;
+	}
+	$value = round($matches[0][0], 1);
+	return str_replace('.', $comma, $value).($suffix ? " {$suffix}" : '');
 }
 
 /** Filters up to two floating point values from any input string and returns a
@@ -86,7 +91,26 @@ function str_centimeters_range($input, $suffix = 'cm', $comma = ',')
 {
 	$input = str_replace(',', '.', $input); // Normalize commas.
 	preg_match_all('!\d+(?:\.\d+)?|(?:\.\d+)!', $input, $matches);
-	return (sizeof($matches[0]) ? str_replace('.', $comma, (sizeof($matches[0]) > 1) ? round($matches[0][0], 1).'&ndash;'.$matches[0][1] : round($matches[0][0], 1)).($suffix ? " {$suffix}" : '') : false);
+	# Return false if no value found.
+	if (sizeof($matches[0]) < 1) {
+		return false;
+	}
+	$value1 = round($matches[0][0], 1);
+	# Value range.
+	if (sizeof($matches[0]) > 1) {
+		$value2 = round($matches[0][1], 1);
+		# Swap values if not in ascending order.
+		if ($value1 > $value2) {
+			return str_replace('.', $comma, $value2.'&ndash;'.$value1).($suffix ? " {$suffix}" : '');
+		}
+		# Ignore identical numbers.
+		if ($value1 == $value2) {
+			return str_replace('.', $comma, $value1).($suffix ? " {$suffix}" : '');
+		}
+		# Return range.
+		return str_replace('.', $comma, $value1.'&ndash;'.$value2).($suffix ? " {$suffix}" : '');
+	}
+	return str_replace('.', $comma, $value1).($suffix ? " {$suffix}" : '');
 }
 
 /** Filters a floating point value from any input string and returns a formatted
